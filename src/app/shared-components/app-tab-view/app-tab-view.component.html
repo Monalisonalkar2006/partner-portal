@@ -1,0 +1,16 @@
+<div class="atv">
+  <div class="atv__nav">
+    <button
+      *ngFor="let tab of tabs; let i = index"
+      type="button"
+      class="atv__tab"
+      [class.atv__tab--active]="i === activeIndex"
+      (click)="select(i)">
+      <i *ngIf="tab.icon" [class]="'atv__icon ' + tab.icon"></i>
+      <span>{{ tab.label }}</span>
+    </button>
+  </div>
+  <div class="atv__body">
+    <ng-content></ng-content>
+  </div>
+</div>

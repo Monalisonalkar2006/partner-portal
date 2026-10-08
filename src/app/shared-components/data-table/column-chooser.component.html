@@ -1,0 +1,25 @@
+<div class="column-chooser" *ngIf="table?.columnChooser">
+  <button
+    type="button"
+    class="column-chooser__toggle"
+    (click)="toggle()">
+    <i class="pi pi-sliders-h"></i>
+  </button>
+
+  <div class="column-chooser__dropdown" *ngIf="isOpen">
+    <label class="column-chooser__option column-chooser__option--all">
+      <input
+        type="checkbox"
+        [checked]="table.isAllColumnsSelected()"
+        (change)="table.toggleSelectAllColumns($event)" />
+      <b>Select All</b>
+    </label>
+    <label class="column-chooser__option" *ngFor="let col of table.toggleableColumns">
+      <input
+        type="checkbox"
+        [checked]="col.visible !== false"
+        (change)="table.onColumnCheckboxChange(col, $event)" />
+      {{ col.visibilityKey || col.field }}
+    </label>
+  </div>
+</div>

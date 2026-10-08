@@ -1,0 +1,431 @@
+﻿<div class="outer_card">
+  <div class="card frequently-container">
+    <!-- card-body -->
+    <div class="div_height_4 zoom_class">
+      <span class="card-title title_header">Frequently Used</span>
+      <div class="row my-1 mt-2">
+        <div class="col-lg-4 col-sm-12 col-md-6">
+          <div class="card card_style_bs">
+            <div class="card-body">
+              <div
+                *ngIf="addNewSignature; else noSignature"
+                class="before-signature"
+              >
+                <div style="padding-top: 35px; padding-right: 50px">
+                  <p-button
+                    label="Add Signature"
+                    data-bs-toggle="modal"
+                    data-bs-target="#signModel"
+                    styleClass="p-button-sm-outline"
+                  ></p-button>
+                </div>
+              </div>
+              <ng-template #noSignature>
+                <div class="signature-container">
+                  <img
+                    class="image-signature"
+                    [src]="'data:image/png;base64,' + base64Image"
+                    *ngIf="base64Image"
+                  />
+                  <a
+                    class="card-link title-link"
+                    data-bs-toggle="modal"
+                    data-bs-target="#signModel"
+                    trackClick="click_get_edit_signature"
+                  >
+                    Edit >>
+                  </a>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-12 col-md-6">
+          <div class="card card_style_bs">
+            <div class="card-body">
+              <h6 class="card-subtitle subtitle_header mb-1">Manage Users</h6>
+              <p class="card-text text_freq">
+                You have <span>{{ userCount }}</span> users linked to this
+                account !
+              </p>
+              <a
+                [routerLink]="['/doqfy/management/user-listing']"
+                class="card-link title_link"
+                trackClick="click_get_started_manage_users"
+                >Get Started >>
+                <!-- <i class='ms-1 bx bx-fast-forward'></i> -->
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-12 col-md-6">
+          <div class="card card_style_bs">
+            <div class="card-body">
+              <h6 class="card-subtitle subtitle_header mb-1">View Orders</h6>
+              <p class="card-text text_freq">
+                You have placed <span>{{ totalOrders }}</span> orders!
+              </p>
+              <a
+                [routerLink]="['/doqfy//orders/orders-list']"
+                class="card-link title_link"
+                trackClick="click_get_started_view_orders"
+                >Get Started >>
+                <!-- <i class=' ms-1 bx bx-fast-forward'></i> -->
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="signModel"
+  tabindex="-1"
+  aria-labelledby="signModelLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="padding: 10px">
+        <h4 class="title_five" id="modal-basic-title">Choose Your Signature</h4>
+        <button
+          type="button"
+          class="btn-close"
+          style="font-size: 0.6rem"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div
+        class="modal-body"
+        style="background-color: #f3eeee; height: 100%; padding: 5px"
+      >
+        <div class="form_outline_model">
+          <div class="row">
+            <div class="col-lg-5 col-sm-5 col-md-5">
+              <span class="form_field">Name and Signature</span
+              ><span class="color_red">*</span>
+              <input
+                class="form-control edit_input"
+                [class.saved-disabled]="signOption === 'saved'"
+                style="
+                  height: 4.5vh;
+                  margin: 0.3rem 0rem;
+                  font-size: 0.8rem;
+                  background-color: #f3eeee;
+                "
+                [(ngModel)]="signatoryDetails.name"
+                (input)="onNameChange()"
+                (ngModelChange)="onNameChange()"
+                placeholder="Enter Name"
+                pInputText
+                type="text"
+                maxlength="30"
+                pattern="[A-Za-z0-9. ]+"
+                [disabled]="signOption === 'saved'"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="form_outline_model">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active title_five_model"
+                style="color: black"
+                id="select-tab"
+                (click)="selectSignatureTab('select')"
+                data-bs-toggle="tab"
+                data-bs-target="#select"
+                type="button"
+                role="tab"
+                aria-controls="select"
+                aria-selected="true"
+              >
+                Select Style
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link title_five_model"
+                style="color: black"
+                id="draw-tab"
+                data-bs-toggle="tab"
+                (click)="selectSignatureTab('draw')"
+                data-bs-target="#draw"
+                type="button"
+                role="tab"
+                aria-controls="draw"
+                aria-selected="false"
+              >
+                Draw
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link title_five_model"
+                style="color: black"
+                id="upload-tab"
+                data-bs-toggle="tab"
+                (click)="selectSignatureTab('upload')"
+                data-bs-target="#upload"
+                type="button"
+                role="tab"
+                aria-controls="upload"
+                aria-selected="false"
+              >
+                Upload
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link title_five_model"
+                style="color: black"
+                id="saved-tab"
+                data-bs-toggle="tab"
+                (click)="selectSavedSignatureTab()"
+                data-bs-target="#saved"
+                type="button"
+                role="tab"
+                aria-controls="saved"
+                aria-selected="false"
+              >
+                Saved Signature
+              </button>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div
+              class="tab-pane fade show active"
+              id="select"
+              role="tabpanel"
+              aria-labelledby="select-tab"
+            >
+              <div class="style-preview-row">
+                <label
+                  class="style-preview-item"
+                  [class.active]="selectedStyle.indexOf('Brush Script MT') > -1"
+                >
+                  <input
+                    type="radio"
+                    id="signStyleBrush"
+                    name="signPlace"
+                    checked
+                    (click)="selectTextSign('Name', 'Brush Script MT')"
+                  />
+                  <span
+                    class="style-preview-text"
+                    style="font: italic 18px 'Brush Script MT', cursive"
+                    >{{ signatoryDetails.name }}</span
+                  >
+                </label>
+                <label
+                  class="style-preview-item"
+                  [class.active]="selectedStyle.indexOf('Comic Sans MS') > -1"
+                >
+                  <input
+                    type="radio"
+                    id="signStyleComic"
+                    name="signPlace"
+                    (click)="selectTextSign('Name', 'Comic Sans MS')"
+                  />
+                  <span
+                    class="style-preview-text"
+                    style="font: italic 18px 'Comic Sans MS', cursive"
+                    >{{ signatoryDetails.name }}</span
+                  >
+                </label>
+                <label
+                  class="style-preview-item"
+                  [class.active]="selectedStyle.indexOf('Courier New') > -1"
+                >
+                  <input
+                    type="radio"
+                    id="signStyleCourier"
+                    name="signPlace"
+                    (click)="selectTextSign('Name', 'Courier New')"
+                  />
+                  <span
+                    class="style-preview-text"
+                    style="font: italic 18px 'Courier New', monospace"
+                    >{{ signatoryDetails.name }}</span
+                  >
+                </label>
+                <label
+                  class="style-preview-item"
+                  [class.active]="selectedStyle.indexOf('Impact') > -1"
+                >
+                  <input
+                    type="radio"
+                    id="signStyleImpact"
+                    name="signPlace"
+                    (click)="selectTextSign('Name', 'Impact')"
+                  />
+                  <span
+                    class="style-preview-text"
+                    style="font: italic 18px Impact, sans-serif"
+                    >{{ signatoryDetails.name }}</span
+                  >
+                </label>
+              </div>
+              <div class="style-preview-panel">
+                <div class="signature-preview-box">
+                  <img
+                    *ngIf="imageStyle"
+                    src="{{ imageStyle }}"
+                    class="signature-preview-image"
+                  />
+                </div>
+                <div class="font-select-panel">
+                  <span class="form_field"
+                    >Select Font<span class="color_red">*</span></span
+                  >
+                  <p-select
+                    class="custom-dropdown"
+                    [options]="signStyle"
+                    [(ngModel)]="selectedStyle"
+                    (onChange)="getStyleType()"
+                    placeholder="Select Font"
+                    optionLabel="name"
+                    optionValue="code"
+                  >
+                    <ng-template let-option pTemplate="item">
+                      <span
+                        class="font-option-item"
+                        [style]="{ font: option.code, 'font-size': '14px' }"
+                        >{{ option.name }}</span
+                      >
+                    </ng-template>
+                  </p-select>
+                </div>
+              </div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="draw"
+              role="tabpanel"
+              aria-labelledby="draw-tab"
+            >
+              <div style="text-align: center; margin-top: 30px">
+                <canvas
+                  #signPadCanvas
+                  style="border: 1px solid #f3eeee; background-color: white"
+                  width="750"
+                  height="150"
+                ></canvas>
+              </div>
+              <!-- <div class="custom_button mt-2 mb-2"
+                              style="text-align: center; margin-top:30px; margin-bottom:30px;">
+                              <p-button styleClass="p-button-sm m-1" label="Undo" (click)="undoSign()"></p-button>
+                          </div> -->
+            </div>
+            <div
+              class="tab-pane fade"
+              id="upload"
+              role="tabpanel"
+              aria-labelledby="upload-tab"
+            >
+              <div class="row mt-4">
+                <span class="form_field">Preview</span>
+                <div
+                  class="col-lg-6 col-sm-6 col-md-6 mt-2 ms-2"
+                  style="border: 1px solid #f3eeee; background-color: white"
+                >
+                  <img
+                    src="{{ pdfSource }}"
+                    style="
+                      max-width: 100%;
+                      height: auto;
+                      background-color: white;
+                    "
+                  />
+                </div>
+                <div class="col-lg-4 col-sm-4 col-md-4 m-4">
+                  <span class="form_field">Upload Sign image for Signature</span
+                  ><span class="color_red">*</span>
+                  <input
+                    [hidden]="true"
+                    type="file"
+                    id="upload_file"
+                    accept="image/jpeg, image/jpg, image/png, image/bmp"
+                    (change)="onFileChange($event)"
+                    #fileInput
+                    #upload_file
+                  />
+
+                  <p-button
+                    label="{{ fileName }}"
+                    (click)="fileInput.click()"
+                    class="ms-2"
+                    styleClass="p-button-sm-outline"
+                  ></p-button>
+                </div>
+                <span style="font-size: 0.5rem"
+                  ><span class="color_red">*</span>Dimensions 4.5 cm x 3cm
+                  (preferred) Size of file should be between ( 10KB – 10MB)
+                  Ensure that the size of the scanned image is not more than
+                  10MB</span
+                >
+              </div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="saved"
+              role="tabpanel"
+              aria-labelledby="saved-tab"
+            >
+              <div class="saved-signature-panel">
+                <div class="signature-preview-box" *ngIf="base64Image">
+                  <img
+                    [src]="'data:image/png;base64,' + base64Image"
+                    class="signature-preview-image"
+                  />
+                </div>
+                <div class="no-saved-signature" *ngIf="!base64Image">
+                  No saved signature found.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-10 ms-3 form_field_content">
+              By selecting "Sign," I acknowledge and agree that the electronic
+              representation of my signature will hold the same legal weight and
+              significance as a traditional pen-and-paper signature for all
+              purposes when used on documents, including legally binding
+              contracts.
+            </div>
+          </div>
+
+          <div class="row me-4 mb-4">
+            <div class="text-left ms-3 mt-2">
+              <p-button
+                label="Save"
+                data-bs-dismiss="modal"
+                (click)="saveImage()"
+                class="ms-2"
+                styleClass="p-button-sm-outline"
+              ></p-button>
+              <!-- <div data-bs-toggle="modal" data-bs-target="#kycModal"></div> -->
+              <p-button
+                *ngIf="signOption != 'select' && signOption != 'saved'"
+                label="Clear"
+                (click)="clearImage()"
+                class="ms-2"
+                styleClass="p-button-sm"
+              ></p-button>
+              <p-button
+                label="Cancel"
+                data-bs-dismiss="modal"
+                class="ms-2"
+                styleClass="p-button-sm"
+              ></p-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

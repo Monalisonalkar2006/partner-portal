@@ -1,0 +1,181 @@
+.app-table {
+  &__cell-tooltip {
+    cursor: default;
+  }
+
+  width: 100%;
+  border: 1px solid var(--theme-border-color, #E8ECF3);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  --table-cell-padding: 0.85rem 1rem;
+
+  /* Header background (PrimeNG v19 datatable design tokens) */
+  --table-header-bg: #ebd9ee;
+  --table-header-color: #2d2d3a;
+  --p-datatable-header-cell-background: #ebd9ee;
+  --p-datatable-header-cell-hover-background: #ebd9ee;
+  --p-datatable-header-cell-color: #2d2d3a;
+  --p-datatable-header-cell-hover-color: #2d2d3a;
+
+  /* Row separator lines (PrimeNG v19 datatable design token) */
+  --p-datatable-body-cell-border-color: #f0f0f4;
+
+  ::ng-deep .p-datatable > .p-datatable-wrapper {
+    overflow-x: auto !important;
+    overflow-y: hidden;
+  }
+
+  ::ng-deep .p-datatable-table {
+    width: 100%;
+    min-width: 100%;
+    border-collapse: collapse;
+  }
+
+  ::ng-deep .p-datatable-thead > tr > th {
+    background: var(--table-header-bg, #ebd9ee) !important;
+    color: var(--table-header-color, #2d2d3a) !important;
+    padding: 0.85rem 1rem !important;
+    font-size: 0.86rem !important;
+    font-weight: 600 !important;
+    font-family: var(--theme-font-family, 'Poppins', sans-serif);
+    line-height: 1.4;
+    white-space: nowrap;
+    vertical-align: middle;
+    border: none !important;
+    border-bottom: 1px solid #e8ecf3 !important;
+  }
+
+  ::ng-deep .p-datatable-tbody > tr {
+    background: #ffffff;
+    transition: background-color 0.15s ease;
+  }
+
+  ::ng-deep .p-datatable-tbody > tr > td {
+    padding: 0.9rem 1rem !important;
+    font-size: 0.85rem !important;
+    font-weight: 400 !important;
+    font-family: 'PoppinsRegular', sans-serif !important;
+    color: #262728;
+    line-height: 1.5;
+    white-space: normal;
+    vertical-align: middle;
+    border: none !important;
+    border-bottom: 1px solid #f0f0f4 !important;
+
+    span:not(.status-badge),
+    div,
+    p {
+      font-weight: 400 !important;
+      font-family: 'PoppinsRegular', sans-serif !important;
+    }
+
+    .status-badge {
+      font-weight: 500 !important;
+    }
+  }
+
+  ::ng-deep .p-datatable-tbody > tr:last-child > td {
+    border-bottom: none !important;
+  }
+
+  /* Row hover */
+  ::ng-deep .p-datatable .p-datatable-tbody > tr:hover > td {
+    background: var(--table-row-hover-bg, rgba(97, 46, 134, 0.03)) !important;
+  }
+
+  /* Click-anywhere-on-row elevation (skipped when nothing is bound to (rowClick),
+     and while hovering a control marked [appRowActionStop]) */
+  ::ng-deep .p-datatable .p-datatable-tbody > tr.clickable {
+    cursor: pointer;
+  }
+
+  ::ng-deep .p-datatable .p-datatable-tbody > tr.clickable:hover:not(.app-table__row--suppress-hover),
+  ::ng-deep .p-datatable .p-datatable-tbody > tr.hover-elevate:hover:not(.app-table__row--suppress-hover) {
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.15s ease;
+  }
+
+  /* Sort icon (matches the legacy per-page raw-table icon) */
+  ::ng-deep .app-table__sort-icon {
+    font-weight: 600;
+    margin-left: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #6b7280;
+    vertical-align: middle;
+  }
+
+  /* Draggable column header (only active when [draggableColumns]="true" and the column itself isn't
+     locked via draggable: false) — no icon, the whole <th> is just the drag surface (cdkDrag). */
+  ::ng-deep .p-datatable-thead > tr > th.app-table__th--draggable {
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  ::ng-deep .p-datatable-thead > tr.cdk-drop-list th.cdk-drag:not(.cdk-drag-disabled):not(.cdk-drag-placeholder) {
+    transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  ::ng-deep .cdk-drag-placeholder {
+    opacity: 0.3;
+    background: var(--theme-color-faint-30, rgba(97, 46, 134, 0.1)) !important;
+  }
+
+  ::ng-deep .selectedRow > td {
+    background-color: #f8f6f9 !important;
+  }
+
+  /* Empty state */
+  &__empty { text-align: center !important; }
+
+  &__empty-inner {
+    display:         flex;
+    flex-direction:  column;
+    align-items:     center;
+    gap:             0.5rem;
+    padding:         2rem 1rem;
+    color:           #adb5bd;
+    font-size:       0.85rem;
+  }
+
+  &__empty-icon {
+    font-size: 2rem;
+    color: #ced4da;
+  }
+
+  /* Loading skeleton pulse */
+  &__skeleton {
+    height:           0.8rem;
+    border-radius:    4px;
+    background:       linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size:  200% 100%;
+    animation:        shimmer 1.4s infinite;
+  }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Not nested under .app-table: CDK clones the dragged <th> out to a top-level overlay
+   container while dragging, so this has to match it regardless of where it ends up in the DOM. */
+::ng-deep .cdk-drag-preview {
+  display: flex !important;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0.5rem 1rem;
+  background: var(--table-header-bg, #ebdeee);
+  color: var(--table-header-color, #343a40);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  font-weight: 600;
+  font-size: 0.85rem;
+  z-index: 1000;
+}

@@ -1,0 +1,110 @@
+<p-menubar class="menuStyle mb-1" [model]="items" breakpoint="640px">
+  <ng-template pTemplate="start">
+    <img
+      (click)="gotoDashboard()"
+      class="clickable"
+      class="logo_style_header"
+    />
+  </ng-template>
+  <ng-template pTemplate="end">
+    <div class="flex-row zoom_class">
+      <div class="flex-row me-2 ms-1">
+        <div class="flex-row text-right notification-container">
+          <div class="notification-badge-container">
+          </div>
+        </div>
+      </div>
+      <div
+        class="profile_ouline"
+        [class.mr-5]="showAvatar"
+        [class.profile-open]="isProfileDropdownOpen"
+      >
+        <button
+          pButton
+          class="p-button-outlined profile-trigger"
+          type="button"
+          id="dropdownMenuButton1"
+          aria-haspopup="true"
+          [attr.aria-expanded]="isProfileDropdownOpen"
+          (click)="isProfileDropdownOpen = !isProfileDropdownOpen"
+        >
+          <p-avatar
+            [label]="userInitials"
+            styleClass="profile-avatar"
+            [style]="{ 'background-color': themeColor, color: '#ffffff' }"
+            shape="circle"
+          ></p-avatar>
+          <span class="profile-details">
+            <span class="profile-name" [title]="userName">{{ userName }}</span>
+            <span class="profile-role">{{ userRoleLabel }}</span>
+          </span>
+          <i class="pi pi-angle-down profile-chevron" aria-hidden="true"></i>
+        </button>
+        <ul
+          class="dropdown-menu"
+          [class.show]="isProfileDropdownOpen"
+          aria-labelledby="dropdownMenuButton1"
+        >
+          <li>
+            <button
+              type="button"
+              class="dropdown-item"
+              (click)="logout()"
+            >
+              <i class="pi pi-sign-out" aria-hidden="true"></i>
+              <span>Log out</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </ng-template>
+</p-menubar>
+ 
+<p-drawer [(visible)]="visibleSidebar2" position="right">
+  <div class="row">
+    <div class="col-lg-5 col-sm-5 col-md-5">
+      <span class="title_five">Notifications</span>
+    </div>
+    <div class="col-lg-7 col-sm-7 col-md-7 text-right">
+      <span class="side_nav_mark"
+        >Mark as read
+        <i
+          class="clickable ms-2 pi pi-check-circle"
+          (click)="setAllMarkAsRead()"
+          style="font-size: 0.6rem"
+        ></i
+      ></span>
+    </div>
+  </div>
+ 
+  <p-accordion [multiple]="false">
+    <p-accordion-panel
+      *ngFor="let notification of notificatioData; let i = index"
+      [value]="i"
+      class="my-1"
+      [ngClass]="notification.is_read ? '' : 'notifi-background'"
+    >
+      <p-accordion-header (click)="setActive(i); markAsRead(notification.id, notification.is_read)">
+        {{ notification.title }}
+      </p-accordion-header>
+      <p-accordion-content>
+        <p>{{ notification.description }}</p>
+      </p-accordion-content>
+    </p-accordion-panel>
+  </p-accordion>
+</p-drawer>
+ 
+<div
+  class="col-lg-3 col-sm-3 col-md-3 overlay_1 cat-execution-dropdown"
+  *ngIf="showSelectBranch"
+>
+  <app-dropdown
+    placeholder="Select Branch"
+    [options]="branchData"
+    [(ngModel)]="selectedBranch"
+    (click)="onBranchChange()"
+    optionLabel="name"
+  ></app-dropdown>
+</div>
+ 

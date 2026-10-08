@@ -1,0 +1,144 @@
+.pp-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* ════════════════════════════════════════════
+   Filters — right-aligned, fixed-width, above grid
+   ════════════════════════════════════════════ */
+.pp-filters {
+  display:         flex;
+  flex-direction:  row;
+  align-items:     center;
+  justify-content: flex-end;
+  gap:             0.6rem;
+  padding:         0.75rem 0 0.5rem;
+
+  &__control {
+    width: 185px;
+
+    p-dropdown, .p-dropdown,
+    p-select, .p-select,
+    p-calendar, .p-calendar,
+    app-search-input { display: block; width: 100%; }
+  }
+
+  &__control--auto { width: auto; }
+}
+
+/* ════════════════════════════════════════════
+   Summary modal
+   ════════════════════════════════════════════ */
+.r1 {
+  color: #25313c; font-family: 'Lato'; font-weight: 600;
+  font-size: 0.7rem; line-height: 20px;
+}
+.r1s {
+  color: #25313c; font-family: 'Lato'; font-weight: 600;
+  font-size: 0.7rem; line-height: 20px; opacity: 0.6; margin-left: 0.438rem;
+}
+
+.table-action-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+
+  a, .clickable, .viewmore {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--theme-color, #612e86) !important;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+
+    i {
+      font-size: 1.05rem;
+      color: var(--theme-color, #612e86) !important;
+    }
+
+    &:hover {
+      opacity: 0.75;
+      transform: scale(1.12);
+    }
+  }
+}
+
+.viewmore {
+  display: inline-block;
+  font-size: 13px; color: var(--theme-color); font-family: 'Poppins';
+}
+
+.modal-title {
+  display: flex; justify-content: space-between; margin: auto;
+  border-bottom: 1.2px solid #612e86; padding-bottom: 2px !important;
+  margin-bottom: 1rem; font-weight: bold; font-size: 0.7rem;
+  width: 100%; border-radius: 10px 10px 0 0;
+}
+.modal-title p    { color: #25313c; }
+.modal-content    { border: 1.2px solid #612e86; }
+.btn-close        { color: #612e86; }
+.modal-content span { color: #ee0d0d !important; }
+
+.modal-bg {
+  font-size: 0.6rem !important;
+  background-color: var(--theme-color-faint-30) !important;
+  font-family: 'Poppins'; color: #151515; line-height: 0.8rem;
+}
+.table-header-custom th { font-size: 0.8rem !important; padding: 0.8rem !important; }
+:host::ng-deep .p-datepicker {
+    min-width: 185px !important;
+    font-size: 0.85rem !important;
+    background: #fff !important;
+}
+
+/* ════════════════════════════════════════════
+   Procurement Report Modal — uniform fields
+   ════════════════════════════════════════════ */
+$report-field-height: 34px;
+$report-font-size:    0.8rem;
+
+#reportModal {
+  .form-label {
+    font-size: $report-font-size;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: #25313c;
+  }
+
+  .form-control {
+    height: $report-field-height;
+    font-size: $report-font-size;
+    padding: 0.25rem 0.6rem;
+  }
+}
+
+:host::ng-deep #reportModal {
+  .p-select,
+  .p-select .p-select-label,
+  .p-datepicker .p-datepicker-input {
+    height: $report-field-height !important;
+    min-height: $report-field-height !important;
+    font-size: $report-font-size !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .p-select {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .p-datepicker {
+    width: 100% !important;
+    min-width: unset !important;
+  }
+
+  .p-datepicker .p-datepicker-input-icon-container {
+    height: $report-field-height !important;
+  }
+}

@@ -1,0 +1,26 @@
+.header_css {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+  }
+
+  .view_page {
+    padding-top: 3.5rem;
+    background-color: #f6f8fb;
+    width: 100%;
+  }
+
+  .footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #ffffff;
+    color: #636363;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 0.25rem 0.25rem;
+  }

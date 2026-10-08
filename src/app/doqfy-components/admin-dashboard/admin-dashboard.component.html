@@ -1,0 +1,21 @@
+<div class="bcg container-fluid px-0">
+  <div class="row g-0 dashboard-row">
+    <div class="col-lg-3 col-sm-12 col-md-12 sidebar-col">
+      <app-admin-side-nav></app-admin-side-nav>
+    </div>
+
+    <div class="col-lg-9 col-sm-12 col-md-12 main-content-container">
+      <div class="content-section">
+        <app-admin-frequently-used [filterDate]="filterDate"></app-admin-frequently-used>
+      </div>
+
+      <div class="content-section">
+        <app-order-dashboard (dateChange)="oneDateChange($event)"></app-order-dashboard>
+      </div>
+
+      <div class="content-section chart-section">
+        <app-chart [filterDate]="filterDate"></app-chart>
+      </div>
+    </div>
+  </div>
+</div>

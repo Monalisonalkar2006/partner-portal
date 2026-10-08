@@ -1,0 +1,135 @@
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  table {
+    min-width: 100%;
+  }
+}
+
+tfoot td {
+  width: 100%;
+}
+
+.view-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 48px;
+}
+
+.view-title-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+:host ::ng-deep .procurement-export-button .p-button-icon {
+  font-size: 0.8rem;
+}
+
+/* Approver Dropdown */
+.approver-email-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-left: 4px;
+}
+
+.approver-email-btn {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid #e1e1e1;
+  border-radius: 50%;
+  background: #fff;
+  color: #495057;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.three-dots-icon {
+  width: 4px;
+  height: 16px;
+  background: radial-gradient(circle, currentColor 1.5px, transparent 1.8px) center top / 4px 6px repeat-y;
+}
+
+.approver-email-btn:hover {
+  background: #f4eff8;
+  border-color: #6f2da8;
+  color: #6f2da8;
+}
+
+.approver-email-dropdown {
+ position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  left: auto;
+  width: 320px;
+  max-width: calc(100vw - 32px);
+  max-height: 180px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #e5e1ea;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  z-index: 99999;
+  padding: 8px 0;
+}
+
+.approver-dropdown-title {
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #343a40;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+}
+
+.approver-email-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  font-size: 0.75rem;
+  color: #495057;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.approver-email-item i {
+  color: #6f2da8;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.approver-email-item:hover {
+  background: #f8f5fb;
+}
+
+.approval-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  position: relative;
+  padding-right: 8px;
+}
+
+@media (max-width: 575.98px) {
+  .view-title-bar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .view-title-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

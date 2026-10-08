@@ -1,0 +1,115 @@
+﻿<div class="bcg p-4">
+    <div class="d-flex justify-content-between custom-container">
+        <nav class="custom-nav">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item" style="cursor: pointer;" [routerLink]="'/doqfy/dashboard'">Dashboard</li>
+                <li class="breadcrumb-item" style="cursor: pointer;" aria-current="page"
+                    [routerLink]="'/doqfy/inventory/stamp-inventory'">Stamp Inventory
+                </li>
+                <li class="breadcrumb-item active" style="cursor: context-menu;" aria-current="page">Inventory Status
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="card card_outLine mt-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6 col-sm-6 col-md-6">
+                    <h5 class="title_five">Stamp Inventory Status</h5>
+                    <p class="card-text text_p ">Check out the details of your Stamps here!</p>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-md-6 text-right custom_button" *ngIf="!isViewMoreClicked">
+                    <p-button class="ms-1" label="Back" [routerLink]="['/doqfy/inventory/stamp-inventory']"
+                        styleClass="p-button-sm-outline"></p-button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card_outLine mt-3" *ngIf="!isViewMoreClicked">
+        <div class="card-body">
+            <div class="inv-table-header mx-2">
+                <h5 class="title_five">Inventory Status Details</h5>
+                <div class="stamp-inventry-filters">
+                    <div class="overlay_1">
+                        <app-dropdown class="custom-dropdown text-left" placeholder="Select Account" [filter]="true"
+                             filterBy="account_name" [options]="accounts" [(ngModel)]="selectedAccount"
+                            (onChange)="onChangeAccount($event)" (onFilter)="onAccountFilter($event)" optionLabel="account_name"
+                            optionValue="id"></app-dropdown>
+                    </div>
+                    <div class="overlay_1">
+                        <app-dropdown class="custom-dropdown text-left" [options]="states" [(ngModel)]="selectedState"
+                            [filter]="true" filterBy="state_name" placeholder="Select State" optionLabel="state_name"
+                            (onChange)="onChangeState()" optionValue="state_code" [showClear]="true"></app-dropdown>
+                    </div>
+                    <div class="overlay_Z_0">
+                        <p-datepicker #calendar class="custom-calendar" [(ngModel)]="rangeDates" dateFormat="dd/mm/yy"
+                            (onSelect)="onSelect()" placeholder="Filter Range" [showIcon]="true" iconDisplay="input" [maxDate]="maxDate"
+                            selectionMode="range" [readonlyInput]="false" inputId="range" [showButtonBar]="true" appendTo="body"
+                            panelStyleClass="preprocurement-datepicker-panel"
+                            (ngModelChange)="onDateRangeChange($event)">
+                        </p-datepicker>
+                    </div>
+                    <div class="stamp-inventry-filters__chooser">
+                        <app-column-chooser [table]="statusTable"></app-column-chooser>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-2 table-responsive">
+                <app-data-table
+                    #statusTable
+                    [columnChooser]="true"
+                    [columns]="statusColumns"
+                    [data]="stampInventoryStatusData"
+                    [paginator]="false"
+                    [analyticsTab]="'Inventory Status'"
+                    emptyMessage="No Records Found"
+                    (rowClick)="getStampDenominationCount($event.state_code)">
+                    <ng-template appTableCell="action" let-row>
+                        <div appRowActionStop>
+                            <a class="viewmore" appIconAction (click)="getStampDenominationCount(row.state_code)"><i
+                                    class="pi pi-eye"></i></a>
+                        </div>
+                    </ng-template>
+                </app-data-table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card_outLine mt-3" *ngIf="isViewMoreClicked">
+        <div class="card-body">
+            <div class="inv-table-header mx-2">
+                <h5 class="title_five">Inventory Status Details - State Wise</h5>
+                <div class="state-wise-filter">
+                    <div class="overlay_Z_0">
+                        <p-datepicker #calendar class="custom-calendar" [(ngModel)]="rangeDates" dateFormat="dd/mm/yy"
+                            (onSelect)="onSelectDateRange()" placeholder="Filter Range" [showIcon]="true" iconDisplay="input" [maxDate]="maxDate"
+                            selectionMode="range" [readonlyInput]="false" inputId="range" [showButtonBar]="true"
+                            (ngModelChange)="onDateRangeChangeStateWise($event)" appendTo="body"
+                            panelStyleClass="preprocurement-datepicker-panel">
+                        </p-datepicker>
+                    </div>
+                    <app-column-chooser [table]="denomTable"></app-column-chooser>
+                    <p-button label="Back" (click)="goToInventoryStatus()"
+                        styleClass="p-button-sm"></p-button>
+                </div>
+            </div>
+
+            <div class="row m-2 table-responsive">
+                <app-data-table
+                    #denomTable
+                    [columnChooser]="true"
+                    [columns]="denominationColumns"
+                    [data]="stampDenominationCountData"
+                    [paginator]="false"
+                    emptyMessage="No Records Found">
+                </app-data-table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast_display_layer">
+    <p-toast></p-toast>
+</div>

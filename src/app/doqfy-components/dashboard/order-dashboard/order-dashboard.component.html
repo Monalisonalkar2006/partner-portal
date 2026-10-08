@@ -1,0 +1,318 @@
+<div>
+  <div class="page_responsive_0 outer_card_1 dashboard-input-container">
+    <div class="card">
+      <div class="card-body" style="padding: 0.8rem 0">
+        <div class="row my-2" style="zoom:88%">
+          <div
+            class="col-lg-3 col-sm-3 col-md-3 overlay"
+           
+          >
+            <span class="form_field ms-1 me-1">Account 
+              <span class="color_red">*</span>
+            </span>
+            <app-dropdown
+              [options]="accountUserData"
+              class="custom-dropdown"
+              placeholder="Select Account"
+              optionLabel="account_display_name"
+              [filter]="true"
+              filterBy="account_name"
+              optionValue="account_id"
+              optionDisabled="is_inactive"
+              [(ngModel)]="selectedAccount"
+              (onChange)="onSelectedAccount($event)"
+            ></app-dropdown>
+          </div>
+          <div
+            class="col-lg-3 col-sm-3 col-md-3 overlay"
+          
+          >
+            <span class="form_field ms-1 me-1">State 
+              <span class="color_red">*</span>
+            </span>
+
+            <app-dropdown
+              class="custom-dropdown"
+              [options]="stateData"
+              [(ngModel)]="selectedState"
+              placeholder="Select State"
+              [showClear]="true"
+              [filter]="true"
+              filterBy="state_name"
+              (onChange)="onStateChange(blankBranchNotify)"
+              optionLabel="state_name"
+            ></app-dropdown>
+          </div>
+          <div
+            class="col-lg-3 col-sm-3 col-md-3 overlay"
+
+          >
+            <span class="form_field ms-1 me-1">Branch
+              <span class="color_red">*</span>
+            </span>
+            <app-dropdown
+              class="custom-dropdown"
+              [options]="branchData"
+              [(ngModel)]="selectedBranch"
+              placeholder="Select Branch"
+              [showClear]="true"
+              [filter]="true"
+              filterBy="name"
+              (click)="onBranchChange()"
+              optionLabel="name"
+            ></app-dropdown>
+          </div>
+          <div
+            class="col-lg-3 col-sm-3 col-md-3 overlay"
+          >
+            <span class="form_field ms-1 me-1">Filter Range</span>
+            <p-datepicker
+              #calendar
+              class="custom-calendar"
+              [(ngModel)]="rangeDates"
+              [maxDate]="maxDate"
+              dateFormat="dd/mm/yy"
+              (onSelect)="onSelect()"
+              placeholder="Filter Range"
+              [showIcon]="true" iconDisplay="input"
+              selectionMode="range"
+              inputId="range"
+              [showButtonBar]="true"
+              (ngModelChange)="onDateRangeChange($event)"
+            >
+            </p-datepicker>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="outer_card">
+    <div class="card order-container">
+      <!-- card-body -->
+      <div class="container">
+        <div class="row order-title-container">
+          <span class="col-lg-6 col-sm-12 col-md-6 card-title title_header"
+            >Order Details</span
+          >
+          <div class="col-lg-6 col-sm-6 col-md-6 text-right pr-3">
+            <p class="title_header mr-1 total-order">
+              Total Order - {{ totalOrders }}
+            </p>
+          </div>
+        </div>
+
+        <div class="order-count-container">
+          <!-- col-lg-3 col-sm-3 col-md-3 -->
+          <div class="count-container">
+            <div class="card card_style_bs_order">
+              <!-- card-body  -->
+              <div class="">
+                <div class="row">
+                  <div class="col-9 order_font col-lg-8">
+                    {{ initiatedOrder }}
+
+                    <div>
+                      <p>Initiated</p>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4 col-sm-3 col-md-3 text-right">
+                    <i class="icon_color bx bxl-dropbox"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="count-container">
+            <div class="card card_style_bs_order">
+              <!-- card-body -->
+              <div class="">
+                <div class="row">
+                  <div class="col-9 order_font col-lg-8">
+                    {{ waitingOrder }}
+
+                    <div>
+                      <p>Waiting for Stamp</p>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-sm-3 col-md-3 text-right">
+                    <i class="icon_color bx bxs-time-five"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="count-container">
+            <div class="card card_style_bs_order">
+              <!-- card-body -->
+              <div class=" ">
+                <div class="row">
+                  <div class="col-9 order_font col-lg-8">
+                    {{ inprogressOrders }}
+
+                    <div style="padding-right: 0">
+                      <p>In Progress</p>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-sm-3 col-md-3 text-right">
+                    <i class="icon_color bx bxs-package"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="count-container">
+            <div class="card card_style_bs_order">
+              <!-- card-body -->
+              <div class=" ">
+                <div class="row">
+                  <div class="col-9 order_font col-lg-8">
+                    {{ completedOrders }}
+
+                    <div>
+                      <p>Completed</p>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-sm-3 col-md-3 text-right">
+                    <!-- <img src="../../../assets/img/Vector.png" height="25" class="logo_style_0"> -->
+                    <i class="icon_color bx bxs-box"></i>
+                    <!-- <i class='bx '></i> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="count-container">
+            <div class="card card_style_bs_order">
+              <!-- card-body -->
+              <div class=" ">
+                <div class="row">
+                  <div class="col-9 order_font col-lg-8">
+                    {{ canceledOrder }}
+
+                    <div>
+                      <p>Cancelled</p>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-sm-3 col-md-3 text-right">
+                    <!-- <img src="../../../assets/img/Vector.png" height="25" class="logo_style_0"> -->
+                    <i class="icon_color bx bxs-box"></i>
+                    <!-- <i class='bx '></i> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #blankBranchNotify let-modal class="model-dashboard">
+  <div class="modal-header dashboard-modal-header">
+    <h4 class="title_five" id="modal-basic-title">
+      <i
+        class="pi pi-exclamation-triangle alertIcon mt-1"
+        pTooltip="View Order"
+      ></i>
+      <span class="ms-2">Alert</span>
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      (click)="closeModel()"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <p class="alertText">
+      Branch data is not available for this State, please select another state
+    </p>
+
+    <div class="modal-btn-container">
+      <p-button
+        label="Ok"
+        (click)="closeModel()"
+        class="ms-2 modal-ok-btn"
+        styleClass="p-button-sm"
+      ></p-button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #selectAccount let-modal class="model-dashboard">
+  <div class="modal-header dashboard-modal-header">
+    <h4 class="title_five" id="modal-basic-title">
+      <span class="ms-2">Select Account</span>
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      (click)="closeModel()"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="form_outline_sty">
+      <div class="row form_inputFields">
+        <div style="margin-left: 1.5rem">
+          <span class="form_field">Select Account</span
+          ><span class="color_red">*</span><br />
+          <app-dropdown
+            [options]="accountUserData"
+            class="custom-dropdown"
+            placeholder="Select Account"
+            [editable]="true"
+            optionLabel="account_name"
+            optionValue="id"
+            [(ngModel)]="selectedAccount"
+            (onChange)="onSelectedAccount($event)"
+          ></app-dropdown>
+        </div>
+        <div style="margin-left: 1.5rem">
+          <span class="form_field">Select State</span
+          ><span class="color_red">*</span><br />
+          <app-dropdown
+            class="custom-dropdown"
+            [options]="stateData"
+            [(ngModel)]="selectedState"
+            placeholder="Select State"
+            [showClear]="true"
+            [filter]="true"
+            filterBy="state_name"
+            (onChange)="onStateChange(blankBranchNotify)"
+            optionLabel="state_name"
+          ></app-dropdown>
+        </div>
+        <div style="margin-left: 1.5rem">
+          <span class="form_field">Select Branch</span
+          ><span class="color_red">*</span> <br />
+          <app-dropdown
+            class="custom-dropdown"
+            [options]="branchData"
+            [(ngModel)]="selectedBranch"
+            placeholder="Select Branch"
+            [showClear]="true"
+            [filter]="true"
+            filterBy="name"
+            (click)="onBranchChange()"
+            optionLabel="name"
+          ></app-dropdown>
+        </div>
+      </div>
+    </div>
+    <div class="modal-btn-container">
+      <p-button
+        label="Ok"
+        (click)="closeModel()"
+        class="ms-2 modal-ok-btn"
+        styleClass="p-button-sm"
+      ></p-button>
+    </div>
+  </div>
+</ng-template>

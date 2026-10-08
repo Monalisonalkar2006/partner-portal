@@ -1,0 +1,51 @@
+.column-chooser {
+  display: inline-block;
+  position: relative;
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    background: #fff;
+    border: 1px solid var(--theme-color, #612e86);
+    border-radius: 8px;
+    color: var(--theme-color, #612e86);
+    cursor: pointer;
+    font-size: 0.85rem;
+
+    &:hover {
+      background: var(--theme-color-faint-30, rgba(97, 46, 134, 0.1));
+    }
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 190px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    cursor: pointer;
+    white-space: nowrap;
+
+    &--all {
+      border-bottom: 1px solid #eee;
+      margin-bottom: 4px;
+      padding-bottom: 8px;
+    }
+  }
+}

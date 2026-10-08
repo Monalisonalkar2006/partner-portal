@@ -1,0 +1,126 @@
+<div *ngIf="!isMsAuthPage">
+  <div class="login-page">
+
+    <!-- Logo shown only on small screens -->
+    <div class="logo-sm-bar">
+      <img alt="Doqfy" class="brand-logo" src="/assets/img/new-logo.png" />
+    </div>
+
+    <div class="login-grid">
+
+      <!-- ── Left illustration panel ── -->
+      <div class="left-panel">
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- ── Right form panel ── -->
+      <div class="right-panel">
+        <div class="form-card">
+
+          <div class="form-title">
+            {{ isOtpStep ? 'Verify your email' : 'Welcome to Doqfy' }}
+          </div>
+          <p class="form-subtitle">
+            {{ isOtpStep ? 'Enter the 6-digit code we sent to your email.' : 'Sign in securely with a one-time code.' }}
+          </p>
+
+          <div *ngIf="showInvalid" class="invalid-credential-box" role="alert">
+            <i class="pi pi-times-circle invalid-credential-icon"></i>
+            <div class="invalid-credential-text">
+              <span class="invalid-credential-title">Unable to sign in</span>
+              <span class="invalid-credential-subtext">{{ authErrorMessage }}</span>
+            </div>
+          </div>
+
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+            <div *ngIf="!isOtpStep" class="field-group">
+              <label class="field-label" for="doqfyEmail">Email</label>
+              <input
+                id="doqfyEmail"
+                type="email"
+                formControlName="email"
+                class="form-input"
+                pInputText
+                autocomplete="email"
+                placeholder="name@company.com"
+                [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
+                [attr.aria-invalid]="submitted && f['email'].invalid"
+                aria-describedby="emailError"
+              />
+              <div *ngIf="submitted && f['email'].errors" id="emailError" class="invalid-feedback">
+                <div *ngIf="f['email'].errors['required']">Email is required</div>
+                <div *ngIf="f['email'].errors['email']">Enter a valid email address</div>
+              </div>
+            </div>
+
+            <div *ngIf="isOtpStep" class="otp-panel">
+              <div class="otp-email-row">
+                <span class="otp-email">{{ selectedUserEmail }}</span>
+                <button class="text-button" type="button" (click)="changeEmail()">Change</button>
+              </div>
+              <div class="otp-input" aria-label="One-time password">
+                <ng-otp-input
+                  *ngIf="showOtpComponent"
+                  (onInputChange)="onOtpChange($event)"
+                  [config]="config"
+                ></ng-otp-input>
+              </div>
+              <div class="resend-row" aria-live="polite">
+                <span *ngIf="timeLeft > 0">Resend code in <strong class="resend-timer-count">{{ timeLeft }}s</strong></span>
+                <button
+                  *ngIf="timeLeft === 0"
+                  class="text-button resend-active-btn"
+                  type="button"
+                  [disabled]="isLoading"
+                  (click)="resendOtp()"
+                >
+                  <i class="pi pi-refresh me-1" *ngIf="!isLoading"></i>
+                  {{ isLoading ? 'Sending code...' : 'Resend code' }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Terms checkbox -->
+            <div class="terms-row">
+              <p-checkbox
+                class="terms-check"
+                formControlName="acceptTerms"
+                [binary]="true"
+                inputId="termsCheckbox"
+              ></p-checkbox>
+              <label for="termsCheckbox" class="terms-label">
+                By continuing, you agree to Doqfy's
+                <a href="https://doqfy.in/terms" target="_blank" class="terms-link">Terms of Services</a>
+                and
+                <a href="https://doqfy.in/policy" target="_blank" class="terms-link">Privacy Policy</a>
+              </label>
+            </div>
+
+            <!-- Login button -->
+            <button class="login-btn" type="submit" [disabled]="isLoading || (isOtpStep && enableOtp)">
+              {{ isLoading ? 'Please wait...' : (isOtpStep ? 'Verify & continue' : 'Send verification code') }}
+            </button>
+
+            <app-microsoft-auth *ngIf="!isOtpStep"></app-microsoft-auth>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+    <p-toast position="top-right" [style]="{ 'margin-top': '10px' }" styleClass="custom-toast"></p-toast>
+  </div>
+
+</div>
+
+<div *ngIf="isMsAuthPage">
+  <div class="d-flex align-items-center justify-content-center vh-100" style="flex-direction: column">
+    <img src="/assets/logos/loading_sso_logo.svg" alt="Doqfy" class="logo" style="height: 4rem; margin-bottom: 0" />
+    <div class="login-container text-center" style="margin-top: -50px">
+      <p class="header_style" style="font-size: 1.2rem; font-weight: 600; margin: 0">Processing Your Login Request</p>
+      <p style="font-size: 0.9rem; color: rgb(2 0 31 / 70%); margin: 0">Hang tight... Logging you in!</p>
+    </div>
+  </div>
+</div>

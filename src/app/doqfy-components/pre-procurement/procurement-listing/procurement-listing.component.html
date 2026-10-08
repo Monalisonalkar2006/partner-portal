@@ -1,0 +1,566 @@
+<div class="bcg p-4">
+  <div class="d-flex justify-content-between custom-container">
+    <nav class="custom-nav">
+      <ol class="breadcrumb">
+        <li
+          *ngIf="userRole === 'CLIENT'; else showAdminDashboard"
+          class="breadcrumb-item"
+          style="cursor: pointer"
+          [routerLink]="'/doqfy/dashboard'"
+        >
+          Dashboard
+        </li>
+        <ng-template #showAdminDashboard>
+          <li
+            class="breadcrumb-item"
+            style="cursor: pointer"
+            [routerLink]="'/doqfy/admin-dashboard'"
+          >
+            Dashboard
+          </li>
+        </ng-template>
+        <li
+          class="breadcrumb-item active"
+          style="cursor: context-menu"
+          aria-current="page"
+        >
+          Pre-procurement
+        </li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="card card_outLine mt-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-4 col-sm-4 col-md-4">
+          <h5 class="title_five">Pre-procurement</h5>
+          <p class="card-text text_p">Pre-procurement orders</p>
+        </div>
+        <div class="col-lg-8 col-sm-8 col-md-8 pp-header-actions">
+          <ng-container *ngIf="orderOption.tabIndex === 0">
+            <p-button
+              *ngIf="!isClient"
+              label="Create new order"
+              [routerLink]="['/doqfy/pre-procurement/procurement-create']"
+              styleClass="p-button-sm-outline"
+            ></p-button>
+            <p-button
+              *ngIf="!isClient"
+              label="Bulk Upload"
+              (click)="openBulkUpload()"
+              styleClass="p-button-sm-outline"
+            >
+            </p-button>
+            <p-button
+              label="Back"
+              (click)="back()"
+              styleClass="p-button-sm-outline"
+            ></p-button>
+          </ng-container>
+          <ng-container *ngIf="orderOption.tabIndex === 1">
+            <p-button
+              *ngIf="!isClient"
+              label="Export"
+              (click)="export()"
+              styleClass="p-button-sm-outline"
+              icon="bx bx-export"
+            ></p-button>
+            <p-button
+              label="Procurement Report"
+              (click)="openReportModal()"
+              styleClass="p-button-sm-outline"
+              icon="pi pi-file-export"
+              iconPos="left"
+            ></p-button>
+            <p-button
+              label="Back"
+              (click)="back()"
+              styleClass="p-button-sm-outline"
+            ></p-button>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- ── Row 2: Tabs → Filters above grid → Grid ── -->
+      <app-tab-view
+        [tabs]="procurementTabs"
+        [activeIndex]="orderOption.tabIndex"
+        (tabChange)="onChangeTab($event)"
+      >
+        <!-- ══ Bulk Tab ══ -->
+        <ng-container *ngIf="orderOption.tabIndex === 0">
+          <!-- Filters: right-aligned, above grid -->
+          <div class="pp-filters">
+            <div class="pp-filters__control">
+              <app-search-input
+                [(ngModel)]="searchText"
+                (ngModelChange)="onChangeSearchText($event)"
+                placeholder="Search by Order ID"
+              >
+              </app-search-input>
+            </div>
+            <div class="pp-filters__control">
+              <p-datepicker
+                class="custom-calendar"
+                [(ngModel)]="rangeDates"
+                (onSelect)="onSelect()"
+                placeholder="Filter Range"
+                [showIcon]="true"
+                iconDisplay="input"
+                [maxDate]="maxDate"
+                selectionMode="range"
+                inputId="range"
+                [showButtonBar]="true"
+                appendTo="body"
+                panelStyleClass="preprocurement-datepicker-panel"
+                (ngModelChange)="onDateRangeChange($event)"
+                dateFormat="dd/mm/yy"
+              >
+              </p-datepicker>
+            </div>
+            <div class="pp-filters__control">
+              <app-dropdown
+                [options]="accountUserData"
+                class="custom-dropdown"
+                placeholder="Select Account"
+                optionLabel="account_name"
+                optionValue="account_id"
+                [filter]="true"
+                [(ngModel)]="selectedAccount"
+                filterBy="account_name"
+                (onChange)="onSelectedAccount($event)"
+                (onFilter)="onAccountFilter($event)"
+              >
+              </app-dropdown>
+            </div>
+            <div
+              *ngIf="isDateRangeValid"
+              class="pp-filters__control pp-filters__control--auto"
+            >
+              <p-button
+                label="Download All"
+                (click)="getSelectedOrderCsv()"
+                styleClass="p-button-sm-outline"
+                icon="pi pi-download"
+                iconPos="left"
+              >
+              </p-button>
+            </div>
+            <div class="pp-filters__control pp-filters__control--auto">
+              <app-column-chooser [table]="bulkTable"></app-column-chooser>
+            </div>
+          </div>
+          <!-- Bulk Grid -->
+          <div class="table-responsive mt-2">
+            <app-data-table
+              #bulkTable
+              [columnChooser]="true"
+              [columns]="bulkColumns"
+              [data]="orderList"
+              [totalRecords]="totalRecords"
+              [rows]="rowsPerPage"
+              [paginator]="true"
+              [analyticsTab]="'Pre-Procurement Bulk'"
+              emptyMessage="No Records Found"
+              (pageChange)="onPageChange($event)"
+              (rowsChange)="onRowsPerPageChange($event)"
+              (rowClick)="viewDetails($event)"
+            >
+              <ng-template appTableCell="total_balance" let-row>
+                ₹{{ row.total_balance }}
+              </ng-template>
+
+              <ng-template appTableCell="status" let-row>
+                <span
+                  class="status-badge"
+                  [ngClass]="{
+                    completed: row.status === 'COMPLETED',
+                    'in-progress': row.status === 'IN_PROGRESS',
+                    initiated: row.status === 'INITIATED',
+                    waitForAprove:
+                      row.status === 'WAITING_FOR_APPROVAL' ||
+                      row.status === 'WAITING_FOR_STAMP',
+                    rejected: row.status === 'REJECTED',
+                  }"
+                  >{{ row.status | titlecase }}</span
+                >
+              </ng-template>
+
+              <ng-template appTableCell="action" let-row>
+                <div class="table-action-group" appRowActionStop>
+                  <a
+                    class="clickable"
+                    appIconAction
+                    (click)="viewDetails(row)"
+                    pTooltip="View Details"
+                    ><i class="pi pi-eye"></i
+                  ></a>
+                  <a
+                    class="viewmore"
+                    (click)="getProcurmentSummary(row)"
+                    data-bs-toggle="modal"
+                    data-bs-target="#summaryModal"
+                    pTooltip="View Summary"
+                    ><i class="pi pi-book"></i
+                  ></a>
+                  <a
+                    class="viewmore"
+                    appIconAction
+                    (click)="exportProcurmentReport(row)"
+                    pTooltip="Export Report"
+                    aria-label="Export Report"
+                  >
+                    <i class="pi pi-download"></i>
+                  </a>
+                  <a
+                    *ngIf="row.reviewer_info?.length !== 0"
+                    class="clickable"
+                    pTooltip="Approve Order Status"
+                    (click)="approveOrderStatus(row)"
+                  >
+                    <i class="pi pi-folder-open"></i>
+                  </a>
+                </div>
+              </ng-template>
+            </app-data-table>
+          </div>
+        </ng-container>
+
+        <!-- ══ Individual Tab ══ -->
+        <ng-container *ngIf="orderOption.tabIndex === 1">
+          <!-- Filters: right-aligned, above grid -->
+          <div class="pp-filters">
+            <div class="pp-filters__control">
+              <app-search-input
+                [(ngModel)]="individualProcurementIdSearch"
+                (ngModelChange)="onIndividualProcurementSearch($event)"
+                placeholder="Search by Procurement ID"
+              >
+              </app-search-input>
+            </div>
+            <div class="pp-filters__control">
+              <app-dropdown
+                [options]="states"
+                class="custom-dropdown"
+                placeholder="Select State"
+                [(ngModel)]="selectedState"
+                optionLabel="state_name"
+                optionValue="state_code"
+                [showClear]="true"
+                (onChange)="onStateChange($event)"
+              >
+              </app-dropdown>
+            </div>
+            <div class="pp-filters__control">
+              <p-datepicker
+                class="custom-calendar"
+                [(ngModel)]="individualRangeDates"
+                placeholder="Filter Range"
+                [showIcon]="true"
+                iconDisplay="input"
+                [maxDate]="maxDate"
+                selectionMode="range"
+                inputId="individualRange"
+                [showButtonBar]="true"
+                appendTo="body"
+                panelStyleClass="preprocurement-datepicker-panel"
+                (ngModelChange)="individualDateRangeChange($event)"
+                dateFormat="dd/mm/yy"
+              >
+              </p-datepicker>
+            </div>
+            <div class="pp-filters__control pp-filters__control--auto">
+              <app-column-chooser [table]="individualTable"></app-column-chooser>
+            </div>
+          </div>
+          <!-- Individual Grid -->
+          <div class="table-responsive mt-2">
+            <app-data-table
+              #individualTable
+              [columnChooser]="true"
+              [columns]="individualColumns"
+              [data]="individualProcurementList"
+              [totalRecords]="individualTotalRecords"
+              [rows]="individualRowsPerPage"
+              [paginator]="true"
+              [analyticsTab]="'Pre-Procurement Individual'"
+              emptyMessage="No Records Found"
+              (pageChange)="individualOnPageChange($event)"
+              (rowsChange)="individualOnRowsPerPageChange($event)"
+            >
+              <ng-template appTableCell="balance" let-row>
+                ₹{{ row.balance }}
+              </ng-template>
+
+              <ng-template appTableCell="status" let-row>
+                <span
+                  class="status-badge"
+                  [ngClass]="{
+                    completed: row.status === 'COMPLETED',
+                    'in-progress': row.status === 'IN_PROGRESS',
+                    initiated: row.status === 'INITIATED',
+                    waitForAprove:
+                      row.status === 'WAITING_FOR_APPROVAL' ||
+                      row.status === 'WAITING_FOR_STAMP',
+                    rejected: row.status === 'REJECTED',
+                  }"
+                  >{{ row.status | titlecase }}</span
+                >
+              </ng-template>
+
+              <ng-template appTableCell="action" let-row>
+                <div class="table-action-group" appRowActionStop>
+                  <a
+                    class="viewmore"
+                    appIconAction
+                    (click)="exportIndividualProcurement(row)"
+                    pTooltip="Export Report"
+                    aria-label="Export Report"
+                  >
+                    <i class="pi pi-download"></i>
+                  </a>
+                </div>
+              </ng-template>
+            </app-data-table>
+          </div>
+        </ng-container>
+      </app-tab-view>
+    </div>
+  </div>
+</div>
+
+<!-- Summary Modal -->
+<div
+  class="modal fade"
+  id="summaryModal"
+  tabindex="-1"
+  aria-labelledby="summaryModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="p-3 modal-title">
+        <p>Summary</p>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <div class="r1">
+              Order No :<span class="r1s">{{ summaryData.order_id }}</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="r1">
+              Organisation:<span class="r1s">{{
+                summaryData.organisation
+              }}</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="r1">
+              Account:<span class="r1s">{{ summaryDetails[0]?.account }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <div class="r1">
+              Ordered By:<span class="r1s">{{ summaryData.order_by }}</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="r1">
+              Ordered Date:<span class="r1s">{{
+                summaryData.order_date | date
+              }}</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="r1">
+              Total Amount:<span class="r1s"
+                >₹{{ summaryData.total_balance }}</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <div class="r1">
+              Pre procurement order count:<span class="r1s">{{
+                preProcurementCount?.procurement_order_count
+              }}</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="r1">
+              Procured stamps:<span class="r1s">{{
+                preProcurementCount?.procured_stamps
+              }}</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="r1">
+              To be procured stamps:<span class="r1s">{{
+                preProcurementCount?.to_be_procured
+              }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <div class="r1">
+              Consumed stamps:<span class="r1s">{{
+                preProcurementCount?.consumed_stamps
+              }}</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="r1">
+              Available stamps:<span class="r1s">{{
+                preProcurementCount?.available_stamps
+              }}</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="r1">
+              Blocked stamps:<span class="r1s">{{
+                preProcurementCount?.blocked_stamps
+              }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="mb-4"></div>
+      </div>
+      <div class="p-3 modal-title"><p>State wise details</p></div>
+      <div class="container mb-5">
+        <div class="mt-1">
+          <app-data-table
+            [columns]="summaryColumns"
+            [data]="summaryDetails"
+            [paginator]="false">
+          </app-data-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Procurement Report Modal -->
+<div
+  class="modal fade"
+  id="reportModal"
+  tabindex="-1"
+  aria-labelledby="reportModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="p-3 modal-title">
+        <p>Procurement Report</p>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeReportModal()"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="container p-3">
+        <div class="row g-2">
+          <div class="col-md-6">
+            <label class="form-label">Procurement ID</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter Procurement ID"
+              [(ngModel)]="reportFilters.pre_procurement_id"
+            />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Certificate Number</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter Certificate Number"
+              [(ngModel)]="reportFilters.certificate_number"
+            />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label"
+              >State <span class="text-danger">*</span></label
+            >
+            <app-dropdown
+              [options]="states"
+              class="custom-dropdown w-100"
+              placeholder="Select State"
+              [(ngModel)]="reportFilters.state_code"
+              optionLabel="state_name"
+              optionValue="state_code"
+              [showClear]="true"
+            >
+            </app-dropdown>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Status</label>
+            <app-dropdown
+              [options]="statusOptions"
+              class="custom-dropdown w-100"
+              placeholder="Select Status"
+              [(ngModel)]="reportFilters.st_status"
+              optionLabel="name"
+              optionValue="code"
+              [showClear]="true"
+            >
+            </app-dropdown>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label"
+              >Procured Date Range <span class="text-danger">*</span></label
+            >
+            <p-datepicker
+              class="custom-calendar w-100"
+              [(ngModel)]="reportProcuredDates"
+              placeholder="Select Date Range"
+              [showIcon]="true"
+              iconDisplay="input"
+              [maxDate]="maxDate"
+              selectionMode="range"
+              [showButtonBar]="true"
+              panelStyleClass="preprocurement-datepicker-panel"
+              (ngModelChange)="onReportProcuredDateChange($event)"
+              dateFormat="dd/mm/yy"
+            >
+            </p-datepicker>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <p-button
+          label="Cancel"
+          (click)="closeReportModal()"
+          styleClass="p-button-sm-outline"
+        ></p-button>
+        <p-button
+          label="Download"
+          (click)="downloadProcurementReport()"
+          styleClass="p-button-sm-outline"
+          icon="pi pi-download"
+          iconPos="left"
+        >
+        </p-button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-confirmDialog
+  [style]="{ width: '50vw' }"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
+<p-toast></p-toast>

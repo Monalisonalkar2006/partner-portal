@@ -1,0 +1,323 @@
+.order-container{
+    border-radius: 12px !important;
+    margin: 1rem 0;
+    padding: 1rem 1.2rem 1.2rem;
+    border: 1.5px solid #E8ECF3;
+    transition: box-shadow 0.2s ease;
+
+    &:hover {
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    }
+}
+
+.order-title{
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+.order-container .bx-trending-down{
+    color:red;
+    background: #E7FAEA;
+    font-size: 14px;
+    margin-right: 2px;
+}
+.order-container .bx-trending-up{
+    color:#089C17;
+    background: #E7FAEA;
+    font-size: 14px;
+    margin-right: 2px;
+}
+
+.order-container .font_size_od{
+    font-size: 0.8rem !important;
+    width: 80% !important;
+}
+
+.order-container .card-body .row p{
+    font-size: 10px;
+}
+
+
+
+.order-container .order_font{
+    padding-right: 0 !important;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.2;
+}
+.order-container .order_font p{
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #6c757d;
+    margin: 3px 0 0;
+    line-height: 1.3;
+}
+
+.order-container .icon_color{
+    font-size: 2rem;
+    color: var(--theme-color, #612e86);
+    opacity: 0.65;
+}
+
+.card_style_bs_order{
+    background: linear-gradient(135deg, var(--theme-color-faint-30, rgba(97,46,134,0.07)) 0%, #fff 100%);
+    border-radius: 12px;
+    padding: 0.75rem 1rem 0.9rem;
+    border: 1px solid rgba(97, 46, 134, 0.1);
+    transition: all 0.2s ease;
+
+    &:hover {
+        box-shadow: 0 4px 14px rgba(97, 46, 134, 0.14);
+        transform: translateY(-2px);
+        border-color: rgba(97, 46, 134, 0.2);
+    }
+}
+.card_style_bs_order p{
+    font-size: 0.7rem;
+}
+
+.p-inputtext{
+    font-size: 1rem;
+    padding: 0 0.5rem;
+}
+
+
+.order-count-container{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0.5rem;
+}
+
+.count-container{
+    width: 16%;
+    display: flex;
+    flex-direction: column;
+}
+
+.count-container .card_style_bs_order {
+    flex: 1;
+}
+
+.count-container p{
+    font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.order-title-container{
+    padding-bottom: 2px;
+}
+
+@keyframes increaseIconSize {
+    from {
+      font-size: 1rem ;
+    }
+    to {
+      font-size: 3rem;
+    }
+  }
+
+.total-order{
+    background: linear-gradient(90deg, var(--theme-color-faint-30, rgba(97,46,134,0.08)) 0%, rgba(97,46,134,0.04) 100%);
+    text-align: right;
+    width: fit-content;
+    padding: 0.3rem 1.1rem;
+    margin-left: auto;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--theme-color, #612e86);
+    border: 1px solid rgba(97,46,134,0.15);
+    margin-bottom: 10px;
+}
+
+
+
+.alertIcon {
+    color: orange;
+}
+
+.dashboard-modal-header{
+    background-color: #eee0f8;
+    height: 1.5rem !important;
+}
+.dashboard-modal-header .btn-close{
+    height: 0.5rem;
+    margin-top: 0 ;
+    margin-bottom: 0;
+    font-size: 0.7rem;
+}
+
+// ::ng-deep .modal-content{
+//     margin-top: 30vh;
+// }
+
+.modal-btn-container{
+    width: 100%;
+    text-align: right;
+}
+
+.modal-ok-btn{
+    margin-left: auto;
+    
+}
+::ng-deep .modal-ok-btn .p-button:enabled:hover{
+    background-color: #B270EC !important;
+}
+
+.alertText{
+    font-size: 0.7rem;
+}
+
+.overlay {
+    position: relative;
+    z-index: 1;
+}
+
+.form_field{
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 3px;
+    display: block;
+}
+
+/* Make calendar look identical to the p-select controls */
+::ng-deep .custom-calendar {
+  width: 100%;
+
+  .p-datepicker {
+    width: 100%;
+  }
+
+  .p-inputtext {
+    border-radius: 8px !important;
+    border: 1px solid var(--theme-border-color, #e8ecf3) !important;
+    height: 2rem !important;
+    font-size: 0.875rem !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    padding-right: 2rem !important;
+
+    &:enabled:focus {
+      border-color: var(--theme-color, #612e86) !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .p-datepicker-input-icon-container {
+    color: #6c757d;
+
+    svg {
+      width: 0.85rem;
+      height: 0.85rem;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+    .card_style_bs_order {
+        background: linear-gradient(135deg, var(--theme-color-faint-30, rgba(97,46,134,0.07)) 0%, #fff 100%) !important;
+        border: 1px solid rgba(97, 46, 134, 0.1) !important;
+
+        &:hover {
+            box-shadow: 0 4px 14px rgba(97, 46, 134, 0.14) !important;
+            border-color: rgba(97, 46, 134, 0.2) !important;
+        }
+    }
+
+    .order-container .order_font {
+        color: #1a1a2e !important;
+    }
+
+    .order-container .order_font p {
+        color: #6c757d !important;
+    }
+
+    .order-container .icon_color {
+        color: var(--theme-color, #612e86) !important;
+        opacity: 0.65 !important;
+    }
+
+    .order-container {
+        border-color: #E8ECF3 !important;
+        background: #ffffff !important;
+    }
+
+    .total-order {
+        background: linear-gradient(90deg, var(--theme-color-faint-30, rgba(97,46,134,0.08)) 0%, rgba(97,46,134,0.04) 100%) !important;
+        color: var(--theme-color, #612e86) !important;
+        border-color: rgba(97,46,134,0.15) !important;
+    }
+}
+
+@media screen and (min-width: 801px) and (max-width: 1200px) {
+    .count-container {
+        width: 18%;
+    }
+
+    .count-container p {
+        font-size: 0.65rem;
+    }
+
+    .order-count-container {
+        gap: 0.4rem;
+    }
+
+    .order-container .order_font {
+        font-size: 1.3rem;
+    }
+
+    .order-container .icon_color {
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 800px) {
+
+    .card_style_bs_order {
+        width: 17rem;
+        margin-bottom: 1rem;
+    }
+
+    .order-count-container{
+        flex-direction: column;
+    }
+   
+    .total-order {
+        margin-bottom: 1rem;
+    }
+
+    .form_field{
+      margin: 0.5rem 0;
+      display: flex;
+    }
+
+    .custom-calendar {
+        margin: 1rem 0;
+        display: flex;
+    }
+
+    .overlay .p-calendar .p-datepicker {
+        left: 0px !important;
+        top: 2rem !important;
+    }
+
+    .p-dropdown-panel {
+        z-index: 1001 !important;
+        position: absolute;
+    }
+
+    .overlay {
+        position: static;
+        z-index: auto;
+        width: 100%;
+    }
+
+}
+

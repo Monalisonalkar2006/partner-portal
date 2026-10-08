@@ -1,0 +1,41 @@
+:host ::ng-deep {
+    .p-toast-message-custom {
+        font-family: 'Poppins';
+        background-color: #F1F9F4;
+        border: 1px solid #34C38F;
+        box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.05);
+        border-radius: 9px;
+        color: #2c1e30;
+        position: absolute;
+        width: 574.05px;
+        height: 86.08px;
+        right: 5px;
+        .p-toast-icon-close {
+            color: #151515;
+        }
+    }
+
+
+}
+
+:host ::ng-deep .p-toast-message-custom .pi-check-circle {
+color: #48B16E;
+}
+
+.viewmore {
+    padding-right: 10px;
+    display: inline-block;
+    font-size: 13px;
+    color: var(--theme-color);
+    font-family: 'Poppins';
+}
+
+.stamp-inventry-filters {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.container-title div{
+    padding-left: 0;
+}

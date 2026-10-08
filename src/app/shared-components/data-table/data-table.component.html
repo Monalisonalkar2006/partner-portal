@@ -1,0 +1,104 @@
+<div class="app-table">
+
+  <p-table
+    [value]="data"
+    [loading]="loading"
+    [rows]="rows"
+    [totalRecords]="totalRecords"
+    [lazy]="lazy"
+    [scrollable]="scrollable"
+    [scrollHeight]="scrollable ? scrollHeight : undefined"
+    [tableStyleClass]="'p_table_style'"
+    styleClass="p-datatable-sm">
+
+    <!-- Header -->
+    <ng-template pTemplate="header">
+      <tr
+        cdkDropList
+        cdkDropListOrientation="horizontal"
+        [cdkDropListDisabled]="!draggableColumns"
+        (cdkDropListDropped)="onColumnDrop($event)">
+        <th
+          *ngFor="let col of visibleColumns"
+          cdkDrag
+          [cdkDragDisabled]="!draggableColumns || col.draggable === false"
+          cdkDragLockAxis="x"
+          [class.app-table__th--draggable]="draggableColumns && col.draggable !== false"
+          [style.width]="col.width">
+          {{ col.header }}
+          <i
+            *ngIf="col.sortable"
+            class="bx bx-sort-alt-2 app-table__sort-icon"
+            (click)="columnSort.emit(col.sortField || col.field)">
+          </i>
+        </th>
+      </tr>
+    </ng-template>
+
+    <!-- Body -->
+    <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+      <tr
+        (click)="onRowClick(row)"
+        [class.clickable]="rowClick.observed"
+        [class.hover-elevate]="hoverElevate"
+        [ngClass]="getRowClass ? getRowClass(row) : null">
+        <td *ngFor="let col of visibleColumns">
+          <ng-container *ngIf="getCellTemplate(col.field) as tpl; else defaultCell">
+            <ng-container *ngTemplateOutlet="tpl; context: { $implicit: row, col: col, index: rowIndex }">
+            </ng-container>
+          </ng-container>
+          <ng-template #defaultCell>
+            <span
+              *ngIf="col.tooltip; else plainCell"
+              class="app-table__cell-tooltip"
+              [ngClass]="col.cellClass"
+              [ngStyle]="col.cellStyle"
+              [pTooltip]="getCellValue(row, col)">{{ getDisplayValue(row, col) }}</span>
+            <ng-template #plainCell>
+              <span *ngIf="col.cellClass || col.cellStyle; else rawText" [ngClass]="col.cellClass" [ngStyle]="col.cellStyle">{{ getDisplayValue(row, col) }}</span>
+              <ng-template #rawText>{{ getDisplayValue(row, col) }}</ng-template>
+            </ng-template>
+          </ng-template>
+        </td>
+      </tr>
+    </ng-template>
+
+    <!-- Empty state -->
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td [attr.colspan]="visibleColumns.length" class="app-table__empty">
+          <div class="app-table__empty-inner">
+            <i class="pi pi-inbox app-table__empty-icon"></i>
+            <p>{{ emptyMessage }}</p>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <!-- Loading skeleton -->
+    <ng-template pTemplate="loadingbody">
+      <tr *ngFor="let i of [1,2,3,4,5]">
+        <td *ngFor="let col of visibleColumns">
+          <div class="app-table__skeleton"></div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <!-- Footer (e.g. a subtotal row), registered via *appTableFooter -->
+    <ng-template pTemplate="footer" *ngIf="footerTemplate">
+      <ng-container *ngTemplateOutlet="footerTemplate"></ng-container>
+    </ng-template>
+
+  </p-table>
+
+  <app-table-pagination
+    *ngIf="paginator && totalRecords > 0"
+    [first]="first"
+    [rows]="rows"
+    [totalRecords]="totalRecords"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    (pageChange)="onPageChange($event)"
+    (rowsChange)="onRowsChange($event)">
+  </app-table-pagination>
+
+</div>

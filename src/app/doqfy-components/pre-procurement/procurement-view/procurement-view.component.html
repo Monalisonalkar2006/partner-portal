@@ -1,0 +1,151 @@
+<div class="bcg p-4 ">
+  <div class="row mb-3">
+    <div class="col-lg-6 col-sm-6 col-md-6">
+      <p class="nav_link_cat  ms-1">
+        <span class="clickable" (click)="gotoDashboard()">Dashboard</span>
+        <span [style.font-weight]="'bold'"> >> </span>
+        <span class="clickable" (click)="gotoListing()">Pre-Procurement</span>
+        <span [style.font-weight]="'bold'"> >> </span>
+        <span>View Pre-Procurement</span>
+      </p>
+    </div>
+    <div class="col-lg-3 col-sm-3 col-md-3 "></div>
+
+  </div>
+
+  <div class="card card_outLine mt-3">
+    <div class="card-body">
+      <div class="view-title-bar">
+        <h5 class="title_five mb-0">StateWise Distribution</h5>
+        <div class="view-title-actions">
+          <p-button label="Export " (click)="export()" icon="pi pi-upload" styleClass="p-button-sm-outline procurement-export-button"></p-button>
+          <p-button class="ms-1" label="Back" [routerLink]="['/doqfy/pre-procurement/procurement-listing']"
+            styleClass="p-button-sm-outline"></p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card_outLine mt-3">
+    <div class="card-body">
+  <div class="d-flex align-items-start justify-content-between mb-2 px-1">
+
+  <!-- LEFT -->
+  <div>
+    <h5 class="title_five mb-1">
+      Total Deposit :₹ {{amountbalance}}
+    </h5>
+
+    <span style="font-size: 0.7rem;">
+      Order No:
+      <span style="color: #495057;">{{orderId}}</span>
+    </span>
+
+    <span style="font-size: 0.7rem;" class="ms-3">
+      Order date:
+      <span style="color: #495057; margin-left: 5px;">
+        {{createdOn | date}}
+      </span>
+    </span>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="approval-actions">
+
+    <div
+      class="approver-email-wrapper"
+    >
+      <button
+        type="button"
+        class="approver-email-btn"
+        title="View all approver details"
+        aria-label="View approver details"
+        (click)="showApproverEmails = !showApproverEmails"
+      >
+        <span class="three-dots-icon" aria-hidden="true"></span>
+      </button>
+
+      <div
+        class="approver-email-dropdown"
+        *ngIf="showApproverEmails"
+      >
+        <div class="approver-dropdown-title">
+          Approvers
+        </div>
+
+        <div
+          class="approver-email-item"
+          *ngFor="let email of approverEmails"
+        >
+          <i class="bx bx-envelope"></i>
+          <span>{{ email }}</span>
+        </div>
+
+        <div class="approver-email-item" *ngIf="!approverEmails.length">
+          No approver details available
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="showApproval" class="custom_button">
+      <p-button
+        label="Approve"
+        (click)="approve()"
+        styleClass="p-button-sm-outline">
+      </p-button>
+
+      <p-button
+        class="ms-1"
+        label="Reject"
+        (click)="reject()"
+        styleClass="p-button-sm">
+      </p-button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- </div> -->
+      <div class="table-responsive mt-2" style="zoom: 95%;">
+        <app-data-table
+          #dataTable
+          [columnChooser]="true"
+          [columns]="columns"
+          [data]="orderDetails"
+          [totalRecords]="totalRecords"
+          [rows]="rowsPerPage"
+          [paginator]="true"
+          emptyMessage="No Records Found"
+          (pageChange)="onPageChange($event)"
+          (rowsChange)="onRowsPerPageChange($event)">
+          <ng-template appTableCell="balance" let-row>
+            ₹ {{ row.balance }}
+          </ng-template>
+
+          <ng-template appTableCell="status" let-row>
+            <span
+              class="status-badge"
+              [ngClass]="{
+                completed: row.status === 'COMPLETED',
+                'in-progress': row.status === 'IN_PROGRESS',
+                initiated: row.status === 'INITIATED',
+                waitForAprove: row.status === 'WAITING_FOR_APPROVAL' || row.status === 'WAITING_FOR_STAMP',
+                rejected: row.status === 'REJECTED'
+              }"
+            >
+              {{
+                row.status === "WAITING_FOR_APPROVAL"
+                  ? "Waiting for Approval"
+                  : row.status
+              }}
+            </span>
+          </ng-template>
+        </app-data-table>
+      </div>
+
+
+    </div>
+  </div>
+
+
+</div>

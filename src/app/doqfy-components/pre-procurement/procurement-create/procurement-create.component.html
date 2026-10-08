@@ -1,0 +1,839 @@
+﻿<div class="bcg p-4">
+  <div class="row mb-3">
+    <div class="col-lg-6 col-sm-6 col-md-6">
+      <p class="nav_link_cat ms-1">
+        <span class="clickable" (click)="gotoDashboard()">Dashboard</span>
+        <span [style.font-weight]="'bold'"> >> </span>
+        <span class="clickable" (click)="gotoListing()">Pre-Procurement</span>
+        <span [style.font-weight]="'bold'"> >> </span>
+        <span>Create New Order</span>
+      </p>
+    </div>
+    <div class="col-lg-3 col-sm-3 col-md-3"></div>
+  </div>
+
+  <div class="card card_outLine mt-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-6 col-sm-6 col-md-6">
+          <h5 class="title_five">Create New Order</h5>
+          <p class="card-text text_p"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card_outLine mt-3">
+    <form [formGroup]="orderDetails">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-6 col-sm-6 col-md-6">
+            <h5 class="title_five">Order Details</h5>
+          </div>
+        </div>
+        <div class="form_outline_style p-3">
+            <div class="row form_inputFields">
+              <div class="col-lg-4 col-sm-6 col-md-6">
+                <span class="form_field">Total Amount</span
+                ><span class="color_red">*</span>
+                <input
+                  class="form-control"
+                  (keydown)="numberOnly($event)"
+                  formControlName="totalAmount"
+                  readonly="true"
+                  placeholder="Enter amount"
+                  pInputText
+                  type="number"
+                />
+                <span
+                  class="p-error"
+                  style="font-size: 0.5rem"
+                  *ngIf="
+                    submitted &&
+                    orderDetails.get('totalAmount')?.hasError('required')
+                  "
+                  >*Enter Amount</span
+                >
+              </div>
+              <div class="col-lg-4 col-sm-6 col-md-6">
+                <div class="overlay_1">
+                  <span class="form_field">Account</span
+                  ><span class="color_red">*</span>
+
+                  <app-dropdown
+                    [options]="accountUserData"
+                    class="custom-dropdown"
+                    placeholder="Select Account"
+                    optionLabel="account_name"
+                    optionValue="account_id"
+                    [filter]="true"
+                    [showClear]="true"
+                    [formControl]="accountSelector"
+                    filterBy="account_name"
+                    (onChange)="onSelectedAccount($event)"
+                    (onFilter)="onAccountFilter($event)"
+                  ></app-dropdown>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div formArrayName="stateDetailsForm" class="mt-2">
+                <section
+                  *ngFor="
+                    let stateOrder of stateDetailsArray().controls;
+                    let i = index
+                  "
+                  [formGroupName]="i"
+                  class="form_inputFields"
+                >
+                  <div class="form_outline_style">
+                    <strong class="m-1 mt-2 title_header_0"
+                      >Order {{ i + 1 }}</strong
+                    >
+
+                    <div class="row form_inputFields">
+                      <div class="col-lg-3 col-sm-12 col-md-6">
+                        <span class="form_field">State Name</span
+                        ><span class="color_red">*</span>
+                        <div style="display: block" class="overlay">
+                          <app-dropdown
+                            class="custom-dropdown procur-dropdown"
+                            (onChange)="
+                              getStampType($event, i);
+                              getArticleIds(i, 'State', $event)
+                            "
+                            placeholder="Select state"
+                            [options]="statesData"
+                            formControlName="state_code"
+                            optionLabel="state_name"
+                            [filter]="true"
+                            filterBy="state_name"
+                            [(ngModel)]="stateOrder.state_code"
+                          ></app-dropdown>
+                        </div>
+                        <span
+                          class="p-error"
+                          style="font-size: 0.5rem"
+                          *ngIf="
+                            submitted &&
+                            stateDetailsArray()
+                              .at(i)
+                              .get('state_code')
+                              ?.hasError('required')
+                          "
+                          >*Enter Name</span
+                        >
+                      </div>
+
+                      <div class="col-lg-3 col-sm-12 col-md-6">
+                        <span class="form_field">Branch Name</span
+                        >
+                        <!-- <span class="color_red">*</span> -->
+                        <div style="display: block" class="overlay">
+                          <app-dropdown
+                            class="custom-dropdown procur-dropdown"
+                            placeholder="Select branch"
+                            [options]="branchData[i]"
+                            formControlName="branch_id"
+                            optionLabel="name"
+                            optionValue="id"
+                            [filter]="true"
+                            filterBy="name"
+                            (onChange)="onBranchChange($event, i)"
+                          ></app-dropdown>
+                        </div>
+                        <span
+                          class="p-error"
+                          style="font-size: 0.5rem"
+                          *ngIf="
+                            submitted &&
+                            stateDetailsArray()
+                              .at(i)
+                              .get('branch_id')
+                              ?.hasError('required')
+                          "
+                          >*Enter Name</span
+                        >
+                      </div>
+
+                      <div class="col-lg-2 col-sm-12 col-md-6">
+                        <span class="form_field">Number of stamps</span>
+                        <span class="color_red">*</span>
+                        <div style="display: block" class="overlay">
+                          <input
+                            class="form-control"
+                            (ngModelChange)="changeValue(i, 'Stamps', $event)"
+                            [min]="0"
+                            (keypress)="numberOnly($event)"
+                            formControlName="no_of_stamps"
+                            placeholder="Enter number of stamps"
+                            pInputText
+                            type="number"
+                            (paste)="onPasteInput($event, 'no_of_stamps', i)"
+                          />
+                          <span
+                            class="p-error"
+                            style="font-size: 0.5rem"
+                            *ngIf="
+                              submitted &&
+                              stateDetailsArray()
+                                .at(i)
+                                .get('no_of_stamps')
+                                ?.hasError('required')
+                            "
+                            >*Enter Enter number of stamps</span
+                          >
+                        </div>
+                      </div>
+                      <div class="col-lg-2 col-sm-12 col-md-6">
+                        <span class="form_field">Stamp Type</span>
+                        <span class="color_red">*</span>
+                        <div style="display: block" class="overlay">
+                          <app-dropdown
+                            class="custom-dropdown procur-dropdown"
+                            placeholder="Select stamp type"
+                            [options]="stampType[i]"
+                            formControlName="stamp_type"
+                            optionLabel="display"
+                            optionValue="code"
+                            (onChange)="onStampTypeChange($event, i)"
+                          ></app-dropdown>
+                        </div>
+                        <span
+                          class="p-error"
+                          style="font-size: 0.5rem"
+                          *ngIf="
+                            submitted &&
+                            stateDetailsArray()
+                              .at(i)
+                              .get('stamp_type')
+                              ?.hasError('required')
+                          "
+                          >*Select stampType</span
+                        >
+                      </div>
+
+                      <div
+                        class="col-lg-1 col-sm-12 col-md-6 d-flex align-items-end mb-2 remove_btn"
+                      >
+                        <button
+                          pButton
+                          pRipple
+                          type="button"
+                          (click)="removeDetails(i)"
+                          class="p-button-sm p-button-outlined remove-order-button"
+                          aria-label="Delete order"
+                          title="Delete order"
+                        >
+                          <i class="pi pi-trash" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div
+                      class="row form_inputFields"
+                      *ngIf="
+                        stateDetailsArray().at(i).get('stamp_type')?.value ===
+                          'ESTAMP' ||
+                        stateDetailsArray().at(i).get('stamp_type')?.value ===
+                          'PRE_ESTAMP' ||
+                        stateDetailsArray().at(i).get('stamp_type')?.value ===
+                          'TRADITIONAL' ||
+                        stateDetailsArray().at(i).get('stamp_type')?.value ===
+                          'E_FRANKING'
+                      "
+                    >
+                      <div class="col-lg-3 col-sm-12 col-md-6">
+                        <span class="form_field">Article Number</span>
+                        <span
+                          *ngIf="stateDetailsArray().at(i).get('stamp_type')?.value === 'ESTAMP' || stateDetailsArray().at(i).get('stamp_type')?.value === 'PRE_ESTAMP' || stateDetailsArray().at(i).get('stamp_type')?.value === 'E_FRANKING'"
+                          class="color_red">*</span>
+                        <div style="display: block;" class="overlay">
+                          <app-dropdown [options]="articles[i]" class="custom-dropdown procur-dropdown" [filter]="true"
+                            filterBy="article_code" placeholder="Select article number" [autoDisplayFirst]="false"
+                            optionLabel="displayText" optionValue="id" [(ngModel)]="stateOrder.article_id"
+                            formControlName="article_id" (onChange)="onArticleNumberChange($event, i)"></app-dropdown>
+                        </div>
+                        <span
+                          class="p-error"
+                          style="font-size: 0.5rem"
+                          *ngIf="
+                            submitted &&
+                            stateDetailsArray()
+                              .at(i)
+                              .get('article_id')
+                              ?.hasError('required')
+                          "
+                          >*Enter Name</span
+                        >
+                      </div>
+
+                      <div class="col-lg-3 col-sm-12 col-md-6">
+                        <span class="form_field">First Party Name</span
+                        ><span class="color_red">*</span>
+                        <input
+                          class="form-control"
+                          formControlName="first_party_name"
+                          placeholder="Enter first party name"
+                          maxlength="50"
+                          pInputText
+                          type="text"
+                          (paste)="onPasteInput($event, 'first_party_name', i)"
+                          onkeypress="return (event.charCode >= 65 && event.charCode <= 90)
+                      || (event.charCode >= 97 && event.charCode <= 122)
+                      || (event.charCode >= 48 && event.charCode <= 57)
+                      || event.charCode == 32"
+                        />
+                        <span
+                          class="p-error"
+                          style="font-size: 0.5rem"
+                          *ngIf="
+                            submitted &&
+                            stateDetailsArray()
+                              .at(i)
+                              .get('first_party_name')
+                              ?.hasError('required')
+                          "
+                          >*Enter First Party Name</span
+                        >
+                      </div>
+
+                      <div class="col-lg-3 col-sm-12 col-md-6">
+                        <span class="form_field">Second Party Name</span
+                        ><span
+                          *ngIf="
+                            stateDetailsArray().at(i).get('stamp_type')
+                              ?.value === 'ESTAMP'
+                          "
+                          class="color_red"
+                          >*</span
+                        >
+                        <input
+                          placeholder="Enter second party name"
+                          class="form-control"
+                          formControlName="second_party_name"
+                          pInputText
+                          type="text"
+                          maxlength="50"
+                          type="text"
+                          (paste)="onPasteInput($event, 'second_party_name', i)"
+                          onkeypress="return (event.charCode >= 65 && event.charCode <= 90)
+                          || (event.charCode >= 97 && event.charCode <= 122)
+                          || (event.charCode >= 48 && event.charCode <= 57)
+                          || event.charCode == 32"
+                        />
+                        <span
+                          class="p-error"
+                          style="font-size: 0.5rem"
+                          *ngIf="
+                            submitted &&
+                            stateDetailsArray()
+                              .at(i)
+                              .get('second_party_name')
+                              ?.hasError('required')
+                          "
+                          >*Enter Second Name</span
+                        >
+                      </div>
+
+                      <div class="col-lg-3 col-sm-12 col-md-6 estamp">
+                        <span class="form_field ms-2">Description</span>
+                        <!-- <span class="color_red">*</span> -->
+                        <div style="display: block" class="">
+                          <input
+                            class="form-control"
+                            formControlName="remarks"
+                            placeholder=" Enter description"
+                            pInputText
+                            type="text"
+                            (paste)="onPasteInput($event, 'remarks', i)"
+                          />
+                          <span
+                            class="p-error"
+                            style="font-size: 0.5rem"
+                            *ngIf="
+                              submitted &&
+                              stateDetailsArray()
+                                .at(i)
+                                .get('remarks')
+                                ?.hasError('required')
+                            "
+                            >*Enter remarks</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row form_inputFields">
+                      <div class="col-lg-3 col-sm-12 col-md-6">
+                        <span class="form_field">Denomination</span
+                        ><span class="color_red">*</span>
+                        <input
+                          class="form-control"
+                          (ngModelChange)="
+                            changeValue(i, 'denominations', $event)
+                          "
+                          [min]="0"
+                          (keypress)="numberOnly($event)"
+                          formControlName="denomination"
+                          placeholder="Enter denomination"
+                          min="1"
+                          pInputText
+                          type="number"
+                          (paste)="onPasteInput($event, 'denomination', i)"
+                        />
+                        <span
+                          class="p-error"
+                          style="font-size: 0.5rem"
+                          *ngIf="
+                            submitted &&
+                            stateDetailsArray()
+                              .at(i)
+                              .get('denomination')
+                              ?.hasError('required')
+                          "
+                          >*Enter Denomination</span
+                        >
+                      </div>
+
+                      <div class="col-lg-3 col-sm-12 col-md-6">
+                        <span class="form_field">Amount</span
+                        ><span class="color_red">*</span>
+                        <input
+                          class="form-control"
+                          [readonly]="zeroValue[i]"
+                          formControlName="amount"
+                          placeholder="Enter amount"
+                          pInputText
+                          type="number"
+                          (paste)="onPasteInput($event, 'amount', i)"
+                          (ngModelChange)="changeAmount(i, $event)"
+                        />
+                        <span
+                          class="p-error"
+                          style="font-size: 0.5rem"
+                          *ngIf="
+                            submitted &&
+                            stateDetailsArray()
+                              .at(i)
+                              .get('amount')
+                              ?.hasError('required')
+                          "
+                          >*Enter Amount</span
+                        >
+                      </div>
+                      <div
+                        *ngIf="showCess[i]"
+                        class="col-lg-3 col-sm-12 col-md-6"
+                      >
+                        <span class="form_field">Cess %</span>
+                        <input
+                          class="form-control"
+                          readonly="true"
+                          formControlName="cessPer"
+                          placeholder="cessPer"
+                          pInputText
+                          type="number"
+                        />
+                        <span
+                          class="p-error"
+                          style="font-size: 0.5rem"
+                          *ngIf="
+                            submitted &&
+                            stateDetailsArray()
+                              .at(i)
+                              .get('cessPer')
+                              ?.hasError('required')
+                          "
+                          >*Enter cessPer</span
+                        >
+                      </div>
+                      <div
+                        *ngIf="showCess[i]"
+                        class="col-lg-3 col-sm-12 col-md-6"
+                      >
+                        <span class="form_field">Cess Amount</span>
+                        <input
+                          class="form-control"
+                          readonly="true"
+                          formControlName="cessAmount"
+                          placeholder="cessAmount"
+                          pInputText
+                          type="number"
+                        />
+                        <span
+                          class="p-error"
+                          style="font-size: 0.5rem"
+                          *ngIf="
+                            submitted &&
+                            stateDetailsArray()
+                              .at(i)
+                              .get('cessAmount')
+                              ?.hasError('required')
+                          "
+                          >*Enter cessAmount</span
+                        >
+                      </div>
+                      <div
+                        class="col-lg-3 col-sm-12 col-md-6 estamp"
+                        *ngIf="
+                          stateDetailsArray().at(i).get('stamp_type')?.value !==
+                            'ESTAMP' &&
+                          stateDetailsArray().at(i).get('stamp_type')?.value !==
+                            'TRADITIONAL' &&
+                          stateDetailsArray().at(i).get('stamp_type')?.value !==
+                            'PRE_ESTAMP' &&
+                          stateDetailsArray().at(i).get('stamp_type')?.value !==
+                            'E_FRANKING'
+                        "
+                      >
+                        <span class="form_field ms-2">Description</span>
+                        <!-- <span class="color_red">*</span> -->
+                        <div style="display: block" class="">
+                          <input
+                            class="form-control"
+                            formControlName="remarks"
+                            placeholder="Enter description"
+                            pInputText
+                            type="text"
+                          />
+                          <span
+                            class="p-error"
+                            style="font-size: 0.5rem"
+                            *ngIf="
+                              submitted &&
+                              stateDetailsArray()
+                                .at(i)
+                                .get('remarks')
+                                ?.hasError('required')
+                            "
+                            >*Enter remarks</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        <div class="row py-4">
+          <div class="col-lg-3 col-sm-3 col-md-3 custom_button">
+            <p-button
+              class="ms-1"
+              label="Add New State"
+              icon="pi pi-plus-circle"
+              (click)="newStateDetails()"
+              styleClass="p-button-sm-outline"
+            ></p-button>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-md-3"></div>
+          <div class="col-lg-3 col-sm-3 col-md-3"></div>
+          <div class="col-lg-3 col-sm-3 col-md-3 text-right custom_button">
+            <p-button
+              class="ms-1 px-2"
+              label="Back"
+              [routerLink]="['/doqfy/pre-procurement/procurement-listing']"
+              styleClass="p-button-sm-outline"
+            ></p-button>
+            <p-button
+              class="ms-1 px-2"
+              label="Preview"
+              (click)="openReviewTab(reviewDataPage)"
+              styleClass="p-button-sm-outline"
+            ></p-button>
+            <!-- <p-button class="ms-1" label="Save" (click)="saveDetails()" styleClass="p-button-sm"></p-button> -->
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ng-template #reviewDataPage let-modal>
+  <div class="modal-header">
+    <h4 class="title_five" id="modal-basic-title">Review Entered Data</h4>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      (click)="closeModel()"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div
+    class="modal-body"
+    style="background-color: #f3eeee; max-height: 75vh; overflow: scroll"
+  >
+    <div
+      class="card mt-1"
+      *ngFor="let order of this.stateDetailsArray().value; let i = index"
+    >
+      <span class="title_header ms-2">Order {{ i + 1 }}</span>
+
+      <div class="row">
+        <div class="col">
+          <div class="r1 ms-2">
+            State:<span class="r1s">{{ order?.state_code.state_name }}</span>
+          </div>
+        </div>
+
+        <div *ngIf="order?.branch_name" class="col">
+          <div class="r1">
+            Branch: <span class="r1s">{{ order?.branch_name }}</span>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="r1">
+            No. of Stamps: <span class="r1s">{{ order?.no_of_stamps }}</span>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="r1">
+            Stamp Type: <span class="r1s">{{ order?.stamp_type }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <div class="r1 ms-2">
+            Denomination:<span class="r1s">{{ order?.denomination }}</span>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="r1">
+            Amount:
+            <span class="r1s">{{
+              isWalletPrepaid
+                ? (order?.amount - order?.cessAmount -
+                  (order?.no_of_stamps * stampConvFee +
+                    order?.no_of_stamps * stampConvFee * 0.18)).toFixed(2)
+                : (order?.amount - order?.cessAmount).toFixed(2)
+            }}</span>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="r1">
+            Cess %: <span class="r1s">{{ order?.cessPer }}</span>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="r1">
+            Cess Amount: <span class="r1s">{{ order?.cessAmount }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <div class="r1">
+            <span class="model-row-title ms-2"> Description:</span>
+            <span class="r1s">{{ order?.remarks }}</span>
+          </div>
+        </div>
+        <div *ngIf="order?.first_party_name" class="col">
+          <div class="r1">
+            First Party: <span class="r1s">{{ order?.first_party_name }}</span>
+          </div>
+        </div>
+
+        <div
+          *ngIf="order?.second_party_name && order.second_party_name !== ''"
+          class="col"
+        >
+          <div class="r1">
+            Second Party:
+            <span class="r1s">{{ order?.second_party_name }}</span>
+          </div>
+        </div>
+
+        <div *ngIf="order?.second_party_name === ''" class="col"></div>
+
+        <div class="col"></div>
+      </div>
+      <div *ngIf="order?.article_name" class="row">
+        <div class="col">
+          <div class="r1 ms-2">
+            Article :<span class="r1s"
+              >{{ articleCodeData[i] }} - {{ order?.article_name }}</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="isWallet" class="row">
+        <div class="col">
+          <div class="r1">
+            <span class="model-row-title ms-2"> Convenience Fee:</span>
+            <span class="r1s">{{ 
+              isWalletPrepaid ? 
+              (order?.no_of_stamps * stampConvFee) : 0
+            }}</span>
+          </div>
+        </div>
+        <div class="col">
+          <div class="r1">
+            GST:
+            <span class="r1s">{{
+              isWalletPrepaid ?  
+              (order?.no_of_stamps * stampConvFee * 0.18 | number : "1.2-2") : 0
+            }}</span>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="r1">
+            Payable Amount:
+            <span class="r1s">{{ order?.amount }}</span>
+          </div>
+        </div>
+
+        <div *ngIf="order?.second_party_name === ''" class="col"></div>
+
+        <div class="col"></div>
+      </div>
+    </div>
+   <form [formGroup]="reviewDetails">
+  <div class="card-body" style="padding: 0">
+
+    <div class="form_outline_sty">
+
+      <div class="form_inputFields col-lg-4 col-sm-4 col-md-4">
+
+        <span class="form_field">Checker</span>
+        <span class="option">(optional)</span>
+
+        <div class="overlay">
+
+          <app-dropdown
+            class="custom-dropdown text-left max_height"
+            placeholder="Select Checker"
+            [options]="userData"
+            formControlName="reviewer"
+            optionLabel="first_name"
+            [showClear]="true"
+            (onChange)="selectReviewer()"
+          ></app-dropdown>
+
+        </div>
+
+        <span
+          class="p-error"
+          style="font-size: 0.5rem"
+          *ngIf="
+            submitted &&
+            reviewDetails.get('reviewer')?.hasError('required')
+          "
+        >
+          *Select Reviewer
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div formArrayName="reviewEmail">
+
+      <div class="form_outline_sty">
+
+        <div class="row">
+
+          <section
+            class="col-lg-4 col-sm-12 col-md-6 mx-3"
+            *ngFor="
+              let details of reviewEmailArray().controls;
+              let detailsIndex = index
+            "
+            [formGroupName]="detailsIndex"
+          >
+
+            <strong class="m-1 mt-2 title_header_0">
+              Reviewer
+            </strong>
+
+            <div class="form_inputFields">
+
+              <div style="display: flex">
+
+                <input
+                  class="form-control"
+                  formControlName="email"
+                  placeholder="Enter Email"
+                  maxlength="50"
+                  readonly="true"
+                  pInputText
+                  type="text"
+                />
+
+                <span
+                  class="p-error"
+                  style="font-size: 0.5rem"
+                  *ngIf="
+                    submitted &&
+                    reviewEmailArray()
+                      .at(detailsIndex)
+                      .get('email')
+                      ?.hasError('required')
+                  "
+                >
+                  *Enter Email
+                </span>
+
+                <div
+                  *ngIf="detailsIndex != 0"
+                  class="col-lg-1 col-sm-1 col-md-1 remove_btn ps-2"
+                >
+                  <button
+                    pButton
+                    pRipple
+                    type="button"
+                    icon="pi pi-trash"
+                    (click)="removeDetailsReview(detailsIndex)"
+                    class="p-button-sm"
+                  ></button>
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</form>
+
+    <div class="modal-footer">
+      <div class="btnRow me-3 mt-2">
+        <div>
+          <p-button
+            label="Cancel"
+            (click)="closeModel()"
+            styleClass="p-button-sm"
+          ></p-button>
+        </div>
+        <div>
+          <p-button
+            label="Save"
+            (click)="saveDetails()"
+            class="ms-2"
+            styleClass="p-button-sm-outline"
+          ></p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<p-toast></p-toast>

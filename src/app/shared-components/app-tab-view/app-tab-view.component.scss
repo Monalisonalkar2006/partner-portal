@@ -1,0 +1,50 @@
+.atv {
+  &__nav {
+    display:        flex;
+    align-items:    center;
+    gap:            0.25rem;
+    border-bottom:  1px solid var(--theme-border-color, #E8ECF3);
+    background:     #fff;
+    padding-bottom: 0;
+  }
+
+  &__tab {
+    display:       inline-flex;
+    align-items:   center;
+    gap:           0.35rem;
+    padding:       0.45rem 1rem;
+    font-family:   var(--theme-font-family, 'Poppins', sans-serif);
+    font-size:     0.82rem;
+    font-weight:   500;
+    color:         #6c757d;
+    background:    transparent;
+    border:        none;
+    border-bottom: 2.5px solid transparent;
+    border-radius: 0;
+    cursor:        pointer;
+    transition:    color 0.15s, border-color 0.15s;
+    margin-bottom: -1px;
+    outline:       none;
+    white-space:   nowrap;
+
+    &:hover:not(.atv__tab--active) {
+      color:         var(--theme-color);
+      background:    var(--theme-color-faint-10);
+      border-radius: 6px 6px 0 0;
+    }
+
+    &--active {
+      color:               var(--theme-color);
+      font-weight:         600;
+      border-bottom-color: var(--theme-color);
+    }
+  }
+
+  &__icon {
+    font-size: 0.75rem;
+  }
+
+  &__body {
+    padding-top: 0;
+  }
+}

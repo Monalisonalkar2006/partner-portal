@@ -1,0 +1,228 @@
+﻿<div class="bcg p-4">
+  <div class="d-flex justify-content-between custom-container">
+    <nav class="custom-nav">
+      <ol class="breadcrumb">
+        <li
+          *ngIf="userRole === 'CLIENT'; else showAdminDashboard"
+          class="breadcrumb-item"
+          style="cursor: pointer"
+          [routerLink]="'/doqfy/dashboard'"
+        >
+          Dashboard
+        </li>
+        <ng-template #showAdminDashboard>
+          <li
+            class="breadcrumb-item"
+            style="cursor: pointer"
+            [routerLink]="'/doqfy/admin-dashboard'"
+          >
+            Dashboard
+          </li>
+        </ng-template>
+        <li
+          class="breadcrumb-item active"
+          style="cursor: context-menu"
+          aria-current="page"
+        >
+          Stamp Inventory
+        </li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="card card_outLine mt-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-4 col-sm-4 col-md-4">
+          <h5 class="title_five">Stamp Inventory</h5>
+          <p class="card-text text_p">
+            Check out the details of your Stamps here!
+          </p>
+        </div>
+        <div class="col-lg-8 col-sm-8 col-md-8 text-right custom_button">
+          <p-button
+            label="Stamp Availability"
+            [routerLink]="['/doqfy/inventory/stamp-availability']"
+            styleClass="p-button-sm-outline"
+          ></p-button>
+          <p-button
+            label="Check Inventory Status"
+            [routerLink]="['/doqfy/inventory/inventory-status']"
+            styleClass="p-button-sm-outline ms-1"
+          ></p-button>
+          <!-- <p-button
+            label="Wallet Balance"
+            [routerLink]="['/doqfy/inventory/wallet-opening-closing-balance']"
+            styleClass="p-button-sm-outline ms-1"
+          ></p-button> -->
+          <p-button
+            class="ms-1"
+            label="Export"
+            (click)="export()"
+            icon="bx bx-export"
+            styleClass="p-button-sm-outline"
+          ></p-button>
+          <p-button
+            class="ms-1"
+            label="Back"
+            (click)="back()"
+            styleClass="p-button-sm-outline"
+          ></p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card_outLine mt-3">
+    <div class="card-body">
+      <div class="inv-table-header mx-2">
+        <h5 class="title_five">Stamp Details</h5>
+        <div class="stamp-inventry-filters">
+          <div class="overlay_1">
+            <app-dropdown
+              class="custom-dropdown text-left"
+              [options]="articles"
+              [(ngModel)]="selectedArticle"
+              [filter]="true"
+              filterBy="article_code"
+              placeholder="Select Article"
+              optionLabel="article_code"
+              (onChange)="onArticleNumberChange()"
+              optionValue="article_code"
+              [showClear]="true"
+            ></app-dropdown>
+          </div>
+          <div class="overlay_1">
+            <app-dropdown
+              class="custom-dropdown text-left"
+              [options]="states"
+              [(ngModel)]="selectedState"
+              [filter]="true"
+              filterBy="state_name"
+              placeholder="Select State"
+              optionLabel="state_name"
+              (onChange)="onChangeState()"
+              optionValue="state_code"
+              [showClear]="true"
+            ></app-dropdown>
+          </div>
+          <div class="overlay_1">
+            <app-dropdown
+              class="custom-dropdown text-left"
+              (onChange)="onStatusChange($event)"
+              [options]="estampStatus"
+              placeholder="Select Status"
+              optionLabel="name"
+              optionValue="code"
+              [showClear]="true"
+            ></app-dropdown>
+          </div>
+          <div class="overlay_1">
+            <app-dropdown
+              [options]="accountUserData"
+              class="custom-dropdown"
+              placeholder="Select Account"
+              optionLabel="account_name"
+              optionValue="account_id"
+              [filter]="true"
+              [showClear]="true"
+              filterBy="account_name"
+              (onChange)="onSelectedAccount($event)"
+              (onFilter)="onAccountFilter($event)"
+            ></app-dropdown>
+          </div>
+          <div class="form_inputFields_1">
+            <app-search-input
+              [(ngModel)]="searchText"
+              (ngModelChange)="onChangeSearchText($event)"
+              placeholder="Search Certificate No.">
+            </app-search-input>
+          </div>
+          <div class="stamp-inventry-filters__chooser">
+            <app-column-chooser [table]="dataTable"></app-column-chooser>
+          </div>
+        </div>
+      </div>
+      <div class="row m-2 table-responsive">
+        <app-data-table
+          #dataTable
+          [columnChooser]="true"
+          [columns]="columns"
+          [data]="stampInventoryData"
+          [totalRecords]="totalRecords"
+          [rows]="rowsPerPage"
+          [paginator]="true"
+          [lazy]="true"
+          [analyticsTab]="'Stamp Inventory'"
+          emptyMessage="No Records Found"
+          (pageChange)="onPageChange($event)"
+          (rowsChange)="onRowsPerPageChange($event)"
+          (rowClick)="getCertificateDetails($event, viewStampOrder)">
+          <ng-template appTableCell="status" let-row>
+            <span
+              *ngIf="row.is_used"
+              class="badge background_color_1 status_title"
+              style="color: #151515"
+              >Used</span
+            >
+            <span
+              *ngIf="!row.is_used && !row.is_expired"
+              class="badge background_color_2 status_title"
+              style="color: #151515"
+              >Available</span
+            >
+            <span
+              *ngIf="row.is_expired"
+              class="badge background_color_3 status_title"
+              style="color: #151515"
+              >Expired</span
+            >
+          </ng-template>
+
+          <ng-template appTableCell="action" let-row>
+            <div appRowActionStop>
+              <a
+                class="viewmore"
+                appIconAction
+                (click)="getCertificateDetails(row, viewStampOrder)"
+                ><i class="pi pi-eye"></i
+              ></a>
+            </div>
+          </ng-template>
+        </app-data-table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #viewStampOrder let-modal>
+  <div class="modal-header">
+    <h4 class="title_five" id="modal-basic-title">View Document</h4>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      (click)="closeModel()"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body" style="background-color: #f3eeee; height: 100%">
+    <div class="iframe_border">
+      <iframe
+        [src]="pdfSource"
+        allow-same-origin
+        class="col-md-12 text-center this-is-iframe"
+        style="
+          height: 40rem;
+          border-width: thin;
+          background-color: #ffffff;
+          transform: scale(1);
+          transform-origin: top;
+        "
+      ></iframe>
+    </div>
+  </div>
+</ng-template>
+
+<div class="toast_display_layer">
+  <p-toast></p-toast>
+</div>

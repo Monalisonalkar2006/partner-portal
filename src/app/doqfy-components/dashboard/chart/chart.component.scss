@@ -1,0 +1,129 @@
+.chart-main-container {
+    border-radius: 12px !important;
+    margin: 0.5rem 0;
+    padding: 1rem 1.2rem 1.4rem;
+    border: 1.5px solid var(--theme-border-color);
+    margin-top: 15px !important;
+    transition: box-shadow 0.25s ease, transform 0.2s ease;
+
+    &:hover {
+        box-shadow: 0 6px 20px rgba(97, 46, 134, 0.1);
+        transform: translateY(-2px);
+    }
+}
+
+
+
+.chart-container {
+    padding: 10px 5px 10px !important;
+    align-items: center;
+}
+
+.chart-title {
+    width: fit-content;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    border-bottom: 2px solid var(--theme-color, #612e86);
+    padding-bottom: 4px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.color-box {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-right: 6px;
+    margin-top: 10px;
+    flex-shrink: 0;
+}
+
+.label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #444;
+    margin-right: 5px;
+    cursor: pointer;
+    transition: color 0.15s ease;
+
+    &:hover {
+        color: var(--theme-color, #612e86);
+    }
+}
+
+.label-container {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: space-between;
+    margin: 0.9rem 0 0.4rem;
+    gap: 2px;
+}
+
+.chart-main-container canvas {
+    height: 8.5rem !important;
+}
+
+.canvas-container {
+    vertical-align: bottom;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin-top: 0.5rem;
+    width: 50%;
+}
+
+.canvas-container-estamp {
+    vertical-align: bottom;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin-top: 0.5rem;
+}
+
+
+.chart-container{
+    flex-direction: row !important;
+}
+
+.label-container .label-text{
+    display: inline-block;
+}
+
+@media screen and (max-width: 800px) {
+
+    .chart-main-container {
+        position: absolute;
+        top: 14rem;
+        height: 12rem;
+    }
+    .chart-container {
+        padding: 5px 10px !important;
+        height: 6rem;
+    }
+
+    .e-sign-card{
+        position: absolute;
+        height: 12rem;
+        top: 0rem;
+    }
+
+    .outer_card{
+        height: 0rem;
+    }
+
+    .e-sign-total-label{
+        position: relative;
+        bottom: 2rem;
+        left: 4rem;
+    }
+    
+    .e-stamp-total-label{
+        position: relative;
+        bottom: 2rem;
+        left: 0rem;
+    }
+}

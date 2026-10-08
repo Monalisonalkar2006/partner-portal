@@ -1,0 +1,142 @@
+/* =====================================================================
+   Design Tokens
+   Set by ThemeService on :root at boot. Defaults here ensure the app
+   renders correctly before initialisation (SSR, hot-reload, tests).
+   ===================================================================== */
+:root {
+  /* --- Brand / Primary --- */
+  --theme-color:          #612E86;
+  --theme-color-dark:     #4a2165;
+  --theme-color-faint-10: rgba(97, 46, 134, 0.06);
+  --theme-color-faint-30: #F0EBF3;
+  --theme-color-faint-50: #EBD0FD;
+
+  /* --- Secondary & Accent --- */
+  --theme-secondary:    #2a2a2a;
+  --theme-accent:       #f5a623;
+  --theme-font-family:  "Poppins", sans-serif;
+
+  /* --- Logo --- */
+  --logo-url:    url('/assets/img/new-logo.png');
+  --logo-height: 35px;
+
+  /* --- Borders & Surfaces --- */
+  --theme-border-color: #E8ECF3;
+  --theme-bg-white:     #ffffff;
+  --theme-bg-light:     #f6f8fb;
+  --theme-bg-muted:     #f9f9f9;
+
+  /* --- Status background tints (semantic, not tenant-specific) --- */
+  --theme-background-color-1: rgba(58, 110, 186, 0.15);
+  --theme-background-color-2: rgba(224, 144, 7, 0.15);
+  --theme-background-color-3: rgba(8, 156, 23, 0.15);
+
+  /* ------------------------------------------------------------------ */
+  /* Button Design Tokens                                                 */
+  /* All p-button / custom button styles consume these tokens so a       */
+  /* single ThemeService call re-skins every button across the app.      */
+  /* ------------------------------------------------------------------ */
+  --btn-primary-bg:           var(--theme-color);
+  --btn-primary-color:        #ffffff;
+  --btn-primary-border:       var(--theme-color);
+  --btn-primary-hover-bg:     var(--theme-color-dark);
+  --btn-primary-hover-border: var(--theme-color-dark);
+
+  --btn-outline-bg:           transparent;
+  --btn-outline-color:        var(--theme-color);
+  --btn-outline-border:       var(--theme-color);
+  --btn-outline-hover-bg:     var(--theme-color);
+  --btn-outline-hover-color:  #ffffff;
+
+  --btn-danger-bg:        #dc3545;
+  --btn-danger-color:     #ffffff;
+  --btn-danger-border:    #dc3545;
+  --btn-danger-hover-bg:  #b02a37;
+
+  --btn-success-bg:       #198754;
+  --btn-success-color:    #ffffff;
+  --btn-success-border:   #198754;
+  --btn-success-hover-bg: #146c43;
+
+  --btn-secondary-bg:       #6c757d;
+  --btn-secondary-color:    #ffffff;
+  --btn-secondary-border:   #6c757d;
+  --btn-secondary-hover-bg: #5c636a;
+
+  --btn-height:        2rem;
+  --btn-font-size:     0.8rem;
+  --btn-font-weight:   500;
+  --btn-border-radius: 0.5rem;
+  --btn-padding:       0.65625rem 1.09375rem;
+
+  /* ------------------------------------------------------------------ */
+  /* Status Badge Tokens                                                  */
+  /* ------------------------------------------------------------------ */
+  --status-completed-bg:    #def7ec;
+  --status-completed-color: #0e9f6e;
+
+  --status-progress-bg:    #fef3c7;
+  --status-progress-color: #d97706;
+
+  --status-initiated-bg:    #e0f0fe;
+  --status-initiated-color: #3b82f6;
+
+  --status-pending-bg:    #fff4db;
+  --status-pending-color: #e59a0b;
+
+  --status-rejected-bg:    #fee2e2;
+  --status-rejected-color: #dc2626;
+
+  /* ------------------------------------------------------------------ */
+  /* Form / Input Tokens                                                  */
+  /* ------------------------------------------------------------------ */
+  --input-height:         2rem;
+  --input-font-size:      0.85rem;
+  --input-border:         1px solid #ced4da;
+  --input-border-radius:  0.375rem;
+  --input-bg:             #ffffff;
+  --input-color:          #212529;
+  --input-placeholder:    #6c757d;
+  --input-focus-border:   var(--theme-color);
+  --input-focus-shadow:   0 0 0 0.15rem var(--theme-color-faint-30);
+  --input-disabled-bg:    #e9ecef;
+
+  --label-font-size:      0.78rem;
+  --label-font-weight:    600;
+  --label-color:          #343a40;
+  --label-required-color: #dc3545;
+
+  --field-error-color:    #dc3545;
+  --field-error-size:     0.7rem;
+  --field-hint-color:     #6c757d;
+  --field-hint-size:      0.7rem;
+
+  /* ------------------------------------------------------------------ */
+  /* Table Tokens                                                         */
+  /* ------------------------------------------------------------------ */
+  --table-header-bg:      #ebd9ee;
+  --table-header-color:   #2d2d3a;
+  --table-header-weight:  600;
+  --table-row-border:     #f0f0f4;
+  --table-row-hover-bg:   rgba(97, 46, 134, 0.03);
+  --table-font-size:      0.85rem;
+  --table-cell-padding:   0.85rem 1rem;
+  --table-body-cell-padding: 0.9rem 1rem;
+  --table-body-font-family: 'PoppinsRegular', sans-serif;
+  --table-body-font-weight: 400;
+
+  /* ------------------------------------------------------------------ */
+  /* Misc                                                                 */
+  /* ------------------------------------------------------------------ */
+  --white: #ffffff;
+
+  /* ------------------------------------------------------------------ */
+  /* PrimeNG v19 token bridge                                             */
+  /* Maps brand tokens → PrimeNG's internal CSS vars so all PrimeNG     */
+  /* components (TabView active state, focus rings, chips…) inherit the  */
+  /* same brand colour without per-component overrides.                   */
+  /* ------------------------------------------------------------------ */
+  --p-primary-color:       var(--theme-color);
+  --p-primary-color-text:  #ffffff;
+  --p-primary-hover-color: var(--theme-color-dark);
+}

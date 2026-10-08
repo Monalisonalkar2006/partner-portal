@@ -1,0 +1,355 @@
+<div class="bcg p-4">
+  <div class="card card_outLine mt-3">
+    <div class="card-body">
+      <!-- Header -->
+      <div
+        class="d-flex justify-content-between align-items-center header-section"
+      >
+        <div>
+          <h5 class="title_five mb-1">Bulk Pre-Procurement</h5>
+
+          <p class="card-text text_p mb-0">
+            Upload an Excel file to create pre-procurement orders in bulk.
+          </p>
+        </div>
+
+        <div class="header-buttons">
+          <p-button
+            label="Back"
+            icon="pi pi-arrow-left"
+            styleClass="p-button-sm-outline"
+            (click)="goBack()"
+          >
+          </p-button>
+
+          <p-button
+            class="split_button"
+            label="Sample Excel"
+            icon="pi pi-download"
+            styleClass="p-button-sm-outline"
+            (click)="template()"
+          >
+          </p-button>
+        </div>
+      </div>
+
+      <hr class="my-4" />
+
+      <!-- Upload Section -->
+      <div class="bulk-upload-wrapper">
+        <!-- Upload Card -->
+        <div
+          class="upload-card"
+         *ngIf="!showUploadedTable || hasValidationErrors || showValidationIssues"
+        >
+          <div class="upload-card-header">
+            <div>
+              <h6 class="title_five mb-1">Upload Excel File</h6>
+              <p class="text_p mb-0">
+                Upload the Excel file to create pre-procurement orders in bulk.
+              </p>
+            </div>
+          </div>
+
+          <!-- Drop Area -->
+          <div class="upload-drop-area">
+            <div class="upload-icon-circle">
+              <i class="pi pi-cloud-upload"></i>
+            </div>
+
+            <div class="upload-main-text">Drag & drop your Excel file here</div>
+
+            <div class="upload-sub-text">
+              or
+              <label for="bulkExcelFile" class="choose-file-link">
+                choose a file
+              </label>
+            </div>
+
+            <input
+              id="bulkExcelFile"
+              type="file"
+              accept=".xlsx,.xls"
+              class="d-none"
+              (change)="onFileSelected($event)"
+            />
+
+            <small class="upload-info">
+              Supported formats: .xlsx, .xls &nbsp; | &nbsp; Maximum size: 10 MB
+            </small>
+          </div>
+
+          <!-- Selected File -->
+          <div *ngIf="selectedFile" class="selected-file-card">
+            <div class="file-left">
+              <div class="excel-icon">
+                <i class="pi pi-file-excel"></i>
+              </div>
+
+              <div>
+                <div class="file-name">
+                  {{ selectedFile.name }}
+                </div>
+                <small> Ready to upload </small>
+              </div>
+            </div>
+            <i
+              class="pi pi-trash remove-icon"
+              (click)="removeFile()"
+              pTooltip="Remove file"
+            ></i>
+          </div>
+          <!-- Validation Error -->
+          <div
+            *ngIf="hasValidationErrors && validationErrors.length"
+            class="validation-error"
+          >
+            <div class="validation-header">
+              <div class="validation-title">
+                <div class="validation-icon">
+                  <i class="pi pi-exclamation-triangle"></i>
+                </div>
+
+                <div>
+                  <strong>
+                    {{ validationErrors.length }}
+                    {{ validationErrors.length === 1 ? "issue" : "issues" }}
+                    found
+                  </strong>
+
+                  <small>
+                    Please correct the Excel file and upload again.
+                  </small>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="view-issues-btn"
+                (click)="showValidationIssues = !showValidationIssues"
+              >
+                {{ showValidationIssues ? "Hide Issues" : "View Issues" }}
+              </button>
+            </div>
+
+            <!-- Issues -->
+            <div class="validation-list" *ngIf="showValidationIssues">
+              <div
+                class="validation-item"
+                *ngFor="let error of validationErrors"
+              >
+                <i class="pi pi-times-circle"></i>
+                <span>{{ error }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upload Button -->
+          <div class="upload-actions">
+            <p-button
+              label="Upload"
+              icon="pi pi-upload"
+              styleClass="p-button-sm-outline"
+              [disabled]="!selectedFile"
+              (click)="uploadExcel()"
+            >
+            </p-button>
+          </div>
+        </div>
+
+        <!-- Successful Upload / Preview -->
+        <div
+          *ngIf="showUploadedTable && !hasValidationErrors"
+          class="uploaded-success-card"
+        >
+          <div class="success-file-info">
+            <div class="success-file-icon">
+              <i class="pi pi-file-excel"></i>
+            </div>
+
+            <div>
+              <h6>Excel uploaded successfully</h6>
+
+              <p>
+                {{ selectedFile?.name }}
+                <span>•</span>
+                {{ excelData.length }} records ready for preview
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- uploaded-success-card end -->
+
+        <div
+          *ngIf="excelData.length > 0 && !hasValidationErrors"
+          class="uploaded-data-section mt-4"
+        >
+          <app-data-table
+            [columns]="previewColumns"
+            [data]="excelData"
+            [paginator]="false">
+            <ng-template appTableCell="s_no" let-row let-i="index">
+              {{ i + 1 }}
+            </ng-template>
+          </app-data-table>
+
+          <div class="text-end mt-3">
+            <p-button
+              type="button"
+              label="Preview"
+              icon="pi pi-eye"
+              styleClass="p-button-sm-outline"
+              (click)="openPreview()"
+            >
+            </p-button>
+          </div>
+          <!--  -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<p-toast></p-toast>
+<div *ngIf="showPreview" class="preview-overlay">
+  <div class="preview-modal">
+    <!-- Header -->
+    <div class="preview-header">
+      <h5 class="title_five mb-0">Review Bulk Pre-Procurement</h5>
+
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="closePreview()"
+      ></button>
+    </div>
+
+    <!-- Body -->
+    <div class="preview-body">
+      <div class="total-records">
+        Total Records: <b>{{ previewData.length }}</b>
+        <span class="ms-4">
+          Total Amount: <b>₹ {{ totalAmount | number }}</b>
+        </span>
+      </div>
+
+      <!-- Order Cards -->
+      <div class="order-card" *ngFor="let row of previewData; let i = index">
+        <div class="order-title">
+          <u>Order {{ i + 1 }}</u>
+        </div>
+
+        <div class="order-grid">
+          <div>
+            <strong>State:</strong>
+            <span>{{ getStateName(row.state_code) || "-" }}</span>
+          </div>
+
+          <div>
+            <strong>First Party:</strong>
+            <span>{{ row.first_party_name || "-" }}</span>
+          </div>
+
+          <div>
+            <strong>Second Party:</strong>
+            <span>{{ row.second_party_name || "-" }}</span>
+          </div>
+
+          <div>
+            <strong>No. of Stamps:</strong>
+            <span>{{ row.no_of_stamps || "-" }}</span>
+          </div>
+
+          <div>
+            <strong>Stamp Type:</strong>
+            <span>{{ row.stamp_type || "-" }}</span>
+          </div>
+
+          <div>
+            <strong>Denomination:</strong>
+            <span>{{ row.denomination || "-" }}</span>
+          </div>
+
+          <div>
+            <strong>Amount:</strong>
+            <span>
+              {{ row.amount | number: "1.2-2" }}
+            </span>
+          </div>
+
+          <div>
+            <strong>Cess %:</strong>
+            <span>{{ row.cessPer ?? 0 }}</span>
+          </div>
+
+          <div>
+            <strong>Cess Amount:</strong>
+            <span>{{ row.cessAmount ?? 0 }}</span>
+          </div>
+
+          <div>
+            <strong>total_amount:</strong>
+            <span>
+              {{ row.balance }}
+            </span>
+          </div>
+
+          <div>
+            <strong>Description:</strong>
+            <span>{{ row.description || "-" }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="approval-card" *ngIf="!autoApprover">
+      <div class="approval-header">
+        <i class="pi pi-shield"></i>
+        <span>Approval & Reviewer</span>
+      </div>
+
+      <div class="approval-content">
+        <form [formGroup]="reviewDetails">
+          <div class="row">
+            <div class="approval-field">
+              <label> Select Reviewer </label>
+
+              <app-multiselect-dropdown
+                [options]="userData"
+                formControlName="reviewer"
+                optionLabel="first_name"
+                optionValue="id"
+                placeholder="Select Reviewer"
+                display="comma"
+                [optionDisabled]="'disabled'"
+              >
+                <ng-template let-user pTemplate="item">
+                  <div class="reviewer-option">
+                    <span>{{ user.first_name }}</span>
+                    <small>{{ user.email }}</small>
+                  </div>
+                </ng-template>
+              </app-multiselect-dropdown>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="preview-footer">
+      <p-button
+        label="Cancel"
+        styleClass="p-button-sm p-button-outlined"
+        (click)="closePreview()"
+      ></p-button>
+
+      <p-button
+        label="Place Order"
+        styleClass="p-button-sm-outline"
+        (click)="saveBulkOrder()"
+      ></p-button>
+    </div>
+  </div>
+</div>
+   <p-toast></p-toast>

@@ -1,0 +1,89 @@
+:host {
+  display: block;
+
+  ::ng-deep .p-dropdown {
+    height: 2rem !important;
+    width: 100% !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--theme-border-color, #e8ecf3) !important;
+    display: flex !important;
+    align-items: center !important;
+    background: #fff;
+    transition: border-color 0.15s, box-shadow 0.15s;
+
+    .p-dropdown-label {
+      font-size: 0.82rem !important;
+      color: #495057;
+      line-height: 1 !important;
+      padding: 0 0.5rem !important;
+      font-family: var(--theme-font-family, 'Poppins', sans-serif);
+    }
+
+    .p-dropdown-trigger {
+      width: 1.8rem !important;
+      color: #6c757d;
+    }
+
+    &.p-focus,
+    &:not(.p-disabled).p-focus {
+      border-color: var(--theme-color) !important;
+      box-shadow: 0 0 0 2px var(--theme-color-faint-30, rgba(97, 46, 134, 0.1)) !important;
+      outline: none;
+    }
+
+    &.p-disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &.grey_background {
+    background: transparent !important;
+    background-color: transparent !important;
+
+    ::ng-deep .p-select,
+    ::ng-deep .p-dropdown {
+      background: #e4e4e4 !important;
+      background-color: #e4e4e4 !important;
+      opacity: 1 !important;
+      cursor: not-allowed;
+      border-radius: 8px !important;
+      border: 1px solid #ced4da !important;
+      overflow: hidden !important;
+    }
+
+    ::ng-deep .p-inputwrapper:not(.p-select):not(.p-dropdown),
+    ::ng-deep .p-select-label,
+    ::ng-deep .p-dropdown-label,
+    ::ng-deep input.p-select-label,
+    ::ng-deep input.p-dropdown-label,
+    ::ng-deep .p-inputtext,
+    ::ng-deep .p-select-dropdown,
+    ::ng-deep .p-dropdown-trigger {
+      background: transparent !important;
+      background-color: transparent !important;
+      border: 0 none !important;
+      border-radius: 0 !important;
+    }
+  }
+
+  ::ng-deep .p-dropdown-panel {
+    font-size: 0.82rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    .p-dropdown-item {
+      font-size: 0.82rem;
+      padding: 0.45rem 0.75rem;
+
+      &.p-highlight {
+        background: var(--theme-color-faint-10, rgba(97, 46, 134, 0.06));
+        color: var(--theme-color);
+      }
+
+      &:hover:not(.p-highlight) {
+        background: var(--theme-color-faint-10, rgba(97, 46, 134, 0.06));
+      }
+    }
+  }
+}

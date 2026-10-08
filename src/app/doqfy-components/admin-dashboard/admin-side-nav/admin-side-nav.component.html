@@ -1,0 +1,769 @@
+<div class="sidebar px-2">
+  <div [ngClass]="{ '': !showRow, 'flex-row': showRow }">
+    <div
+      [ngClass]="{ row: !showRow, 'col-6': showRow }"
+      class="outer_card side-welcome-container"
+    >
+      <div class="card welcome-container">
+        <div class="zoom_class">
+          <p class="mb-2 user-tag">
+            <span
+              class="badge background_color_1"
+              style="color: #151515; margin: auto"
+              >{{ role }}</span
+            >
+          </p>
+          <h6 class="card-title mb-1">
+            👋🏼 <span class="title_header">Welcome Back</span
+            ><span class="title_header_2"
+              >,
+              {{
+                userName.length > 15 ? userName.slice(0, 15) + "..." : userName
+              }}</span
+            >
+          </h6>
+          <p class="card-text title_header_1">
+            {{ today | date: "dd MMMM, yyyy - EEEE" }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      [ngClass]="{ row: !showRow, 'col-6': showRow }"
+      class="outer_card side-wallet-container"
+    >
+      <div *ngIf="is_wallet" class="wallet-container px-0">
+        <!-- Tab Header -->
+        <div class="tab-header">
+          <button
+            class="tab-button"
+            [class.active]="tabIndex === 0"
+            (click)="tabIndex = 0"
+          >
+            <span>Wallet</span>
+          </button>
+          <button
+            class="tab-button"
+            [class.active]="tabIndex === 1"
+            (click)="tabIndex = 1"
+            *ngIf="is_wallet && is_inventory"
+          >
+            <span>Inventory</span>
+          </button>
+        </div>
+
+        <!-- Content Area -->
+        <div class="wallet-content">
+          <!-- Wallet Tab -->
+          <div class="balance-section" *ngIf="tabIndex === 0">
+            <div class="balance-header mt-3">
+              <div class="balance-title">
+                <svg
+                  width="25px"
+                  height="25px"
+                  viewBox="0 0 48 48"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#612E86"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path d="M0 0h48v48H0z" fill="none"></path>
+                    <g id="Shopicon">
+                      <path
+                        d="M31.278,25.525C34.144,23.332,36,19.887,36,16c0-6.627-5.373-12-12-12c-6.627,0-12,5.373-12,12 c0,3.887,1.856,7.332,4.722,9.525C9.84,28.531,5,35.665,5,44h38C43,35.665,38.16,28.531,31.278,25.525z M16,16c0-4.411,3.589-8,8-8 s8,3.589,8,8c0,4.411-3.589,8-8,8S16,20.411,16,16z M24,28c6.977,0,12.856,5.107,14.525,12H9.475C11.144,33.107,17.023,28,24,28z"
+                      ></path>
+                    </g>
+                  </g>
+                </svg>
+                <span class="card-title title_header">Account No</span>
+              </div>
+              <div class="balance-title">
+                <span class="card-title title_header">{{ accountNo }}</span>
+              </div>
+            </div>
+
+            <div class="balance-header">
+              <div class="balance-title">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25px"
+                  height="25px"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#612E86"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-wallet"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12"
+                  />
+                  <path d="M20 12v4h-4a2 2 0 0 1 0 -4h4" />
+                </svg>
+                <span class="card-title title_header">Wallet Balance</span>
+              </div>
+              <div class="balance-amount">
+                <span
+                  class="currency"
+                  style="font-family: Arial; padding-right: 0.2rem"
+                  >&#8377;</span
+                >
+                <!-- <span class="amount">{{ displayBalance }}</span> -->
+
+                <ng-container *ngIf="isRefreshing; else amountDisplay">
+                  <span class="amount-skeleton"></span>
+                </ng-container>
+
+                <ng-template #amountDisplay>
+                  <span class="amount">{{ displayBalance | number }}</span>
+                </ng-template>
+
+                <!-- <button
+                    class="refresh-btn"
+                    (click)="refreshBalance()"
+                    [disabled]="isRefreshing"
+                    [class.spinning]="isRefreshing"
+                    title="Refresh balance"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 11A8.1 8.1 0 0 0 4.5 9M4 5v4h4"/>
+                      <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"/>
+                    </svg>
+                  </button> -->
+              </div>
+            </div>
+
+            <div
+              style="
+                padding-bottom: 8px;
+                display: flex;
+                justify-content: space-around;
+              "
+            >
+              <button
+                class="action-btn view-more"
+                (click)="navigateTo('wallet/transaction-details')"
+              >
+                Wallet Transactions
+                <i class="pi pi-external-link"></i>
+              </button>
+
+              <p-button
+                *ngIf="showAddMoney"
+                label="Add Money"
+                styleClass="p-button-sm-outline"
+                (onClick)="showWalletModal = true"
+              ></p-button>
+            </div>
+
+            <p-dialog
+              header="Top-up Wallet"
+              [(visible)]="showWalletModal"
+              (onHide)="refreshBalance()"
+              [draggable]="false"
+              [modal]="true"
+              [style]="{ width: '85vw' }"
+              [breakpoints]="{ '960px': '85vw', '640px': '100vw' }"
+              styleClass="custom-wallet-modal"
+            >
+              <div
+                *ngIf="loading"
+                class="payment-overlay-backdrop d-flex flex-column justify-content-center align-items-center"
+              >
+                <i
+                  class="pi pi-spin pi-spinner"
+                  style="font-size: 3rem; color: #722c60"
+                ></i>
+                <span class="mt-3 fw-bold" style="color: #722c60"
+                  >Processing Payment...</span
+                >
+                <!-- <small class="text-muted mt-1">Please do not close this window.</small> -->
+              </div>
+
+              <div class="modal-body px-4">
+                <h6 class="fw-bold mb-3" style="font-size: 0.9rem">
+                  <svg
+                    class="mb-1"
+                    width="18px"
+                    height="18px"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g
+                      id="SVGRepo_tracerCarrier"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M10.8321 1.24802C11.5779 0.917327 12.4221 0.917327 13.1679 1.24802L21.7995 5.0754C23.7751 5.95141 23.1703 9 21.0209 9H2.97906C0.829669 9 0.224891 5.9514 2.20047 5.0754L10.8321 1.24802ZM12.3893 3.12765C12.1407 3.01742 11.8593 3.01742 11.6107 3.12765L3.41076 6.76352C3.31198 6.80732 3.34324 6.95494 3.45129 6.95494H20.5487C20.6568 6.95494 20.688 6.80732 20.5892 6.76352L12.3893 3.12765Z"
+                        fill="#722C60"
+                      ></path>
+                      <path
+                        d="M2 22C2 21.4477 2.44772 21 3 21H21C21.5523 21 22 21.4477 22 22C22 22.5523 21.5523 23 21 23H3C2.44772 23 2 22.5523 2 22Z"
+                        fill="#722C60"
+                      ></path>
+                      <path
+                        d="M11 19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19V11C13 10.4477 12.5523 10 12 10C11.4477 10 11 10.4477 11 11V19Z"
+                        fill="#722C60"
+                      ></path>
+                      <path
+                        d="M6 20C5.44772 20 5 19.5523 5 19L5 11C5 10.4477 5.44771 10 6 10C6.55228 10 7 10.4477 7 11L7 19C7 19.5523 6.55229 20 6 20Z"
+                        fill="#722C60"
+                      ></path>
+                      <path
+                        d="M17 19C17 19.5523 17.4477 20 18 20C18.5523 20 19 19.5523 19 19V11C19 10.4477 18.5523 10 18 10C17.4477 10 17 10.4477 17 11V19Z"
+                        fill="#722C60"
+                      ></path>
+                    </g>
+                  </svg>
+                  Pay through VAN (Virtual Account)
+                </h6>
+
+                <div class="row g-3 mb-3 align-items-stretch">
+                  <!-- Left Side: VAN Section -->
+                  <div class="col-md-6">
+                    <div
+                      class="van-section p-3 pt-4 border rounded bg-light h-100"
+                    >
+                      <div
+                        class="d-flex align-items-center justify-content-between mb-2"
+                        *ngIf="userAccount?.virtual_account_no"
+                      >
+                        <span class="text-muted small fw-semibold"
+                          >Account No.</span
+                        >
+                        <div class="d-flex align-items-center">
+                          <span class="fw-bold me-2">{{
+                            userAccount.virtual_account_no
+                          }}</span>
+                          <i
+                            class="pi pi-copy cursor-pointer"
+                            (click)="
+                              copyAccountToClipboard(
+                                userAccount.virtual_account_no
+                              )
+                            "
+                            [title]="justCopiedAccount ? 'Copied!' : 'Copy'"
+                          ></i>
+                        </div>
+                      </div>
+
+                      <div
+                        class="d-flex align-items-center justify-content-between"
+                        *ngIf="userAccount?.ifsc"
+                      >
+                        <span class="text-muted small fw-semibold"
+                          >IFSC Code</span
+                        >
+                        <div class="d-flex align-items-center">
+                          <span class="fw-bold me-2">{{
+                            userAccount.ifsc
+                          }}</span>
+                          <i
+                            class="pi pi-copy cursor-pointer"
+                            (click)="copyIfscToClipboard(userAccount.ifsc)"
+                            [title]="justCopiedIfsc ? 'Copied!' : 'Copy'"
+                          ></i>
+                        </div>
+                      </div>
+
+                      <div class="text-end" style="height: 15px">
+                        <small
+                          *ngIf="justCopiedAccount || justCopiedIfsc"
+                          class="text-success"
+                          style="font-size: 0.7rem"
+                          >Copied!</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div
+                      class="bank-link-container p-2 border rounded bg-light h-100 d-flex flex-column justify-content-center"
+                    >
+                      <p
+                        class="text-muted mb-2 ps-1"
+                        style="
+                          font-size: 0.65rem;
+                          font-weight: 700;
+                          letter-spacing: 0.5px;
+                        "
+                      >
+                        Net Banking
+                      </p>
+                      <div class="bank-horizontal-grid">
+                        <a
+                          href="https://netbanking.hdfcbank.com/"
+                          target="_blank"
+                          class="bank-icon-item"
+                          title="Proceed to HDFC Net Banking"
+                        >
+                          <img
+                            src="../../../assets/logos/bank-icons/HDFC.png"
+                            alt="HDFC"
+                          />
+                          <!-- <span>HDFC</span> -->
+                        </a>
+                        <a
+                          href="https://onlinesbi.sbi/"
+                          target="_blank"
+                          class="bank-icon-item"
+                          title="Proceed to SBI Net Banking"
+                        >
+                          <img
+                            src="../../../assets/logos/bank-icons/SBI.png"
+                            alt="SBI"
+                          />
+                          <!-- <span>SBI</span> -->
+                        </a>
+                        <a
+                          href="https://www.icicibank.com/"
+                          target="_blank"
+                          class="bank-icon-item"
+                          title="Proceed to ICICI Net Banking"
+                        >
+                          <img
+                            src="../../../assets/logos/bank-icons/ICICI.png"
+                            alt="ICICI"
+                          />
+                          <!-- <span>ICICI</span> -->
+                        </a>
+                        <a
+                          href="https://www.axisbank.com/"
+                          target="_blank"
+                          class="bank-icon-item"
+                          title="Proceed to Axis Net Banking"
+                        >
+                          <img
+                            src="../../../assets/logos/bank-icons/Axis.png"
+                            alt="Axis"
+                          />
+                          <!-- <span>Axis</span> -->
+                        </a>
+                        <a
+                          href="https://netbanking.kotak.bank.in/knb2/"
+                          target="_blank"
+                          class="bank-icon-item"
+                          title="Proceed to Kotak Net Banking"
+                        >
+                          <img
+                            src="../../../assets/logos/bank-icons/Kotak.png"
+                            alt="Kotak"
+                          />
+                          <!-- <span>Kotak</span> -->
+                        </a>
+                        <a
+                          href="https://www.canarabank.bank.in/pages/Net-banking"
+                          target="_blank"
+                          class="bank-icon-item"
+                          title="Proceed to Canara Net Banking"
+                        >
+                          <img
+                            src="../../../assets/logos/bank-icons/Canara.png"
+                            alt="Canara"
+                          />
+                          <!-- <span>Canara</span> -->
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!--
+                <div class="position-relative text-center my-5">
+                  <hr class="text-muted" />
+                  <span
+                    class="position-absolute top-50 start-50 translate-middle bg-white px-3 fw-bold text-muted small"
+                    >OR</span
+                  >
+                </div>
+
+                <h6 class="fw-bold mb-3" style="font-size: 0.9rem">
+                  <svg
+                    class="mb-1"
+                    width="22px"
+                    height="22px"
+                    viewBox="0 0 24.00 24.00"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g
+                      id="SVGRepo_tracerCarrier"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <rect
+                        x="3"
+                        y="6"
+                        width="18"
+                        height="13"
+                        rx="2"
+                        stroke="#722C60"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></rect>
+                      <path
+                        d="M3 10H20.5"
+                        stroke="#722C60"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                      <path
+                        d="M7 15H9"
+                        stroke="#722C60"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </g>
+                  </svg>
+                  Pay through UPI / Cards / Net Banking
+                </h6>
+                -->
+
+                <form [formGroup]="walletForm" (ngSubmit)="onPayNow()">
+                  <div class="row g-2 mb-3">
+
+                    <!--
+                    <div class="col-md-3">
+                      <label class="form-label small fw-semibold">Payee Name</label>
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        formControlName="name"
+                        placeholder="Enter Name"
+                        [ngClass]="{'is-invalid': walletForm.get('name')?.invalid && walletForm.get('name')?.touched}"
+                      />
+                      <div *ngIf="walletForm.get('name')?.invalid && walletForm.get('name')?.touched" class="text-danger small mt-1">
+                        <span *ngIf="walletForm.get('name')?.errors?.['required']">Name is required.</span>
+                        <span *ngIf="walletForm.get('name')?.errors?.['maxlength']">Max 50 characters allowed.</span>
+                      </div>
+                    </div>
+
+                    <div class="col-md-3">
+                      <label class="form-label small fw-semibold">Payee Email</label>
+                      <input
+                        type="email"
+                        class="form-control form-control-sm"
+                        formControlName="email"
+                        placeholder="Enter Email"
+                        [ngClass]="{'is-invalid': walletForm.get('email')?.invalid && walletForm.get('email')?.touched}"
+                      />
+                      <div *ngIf="walletForm.get('email')?.invalid && walletForm.get('email')?.touched" class="text-danger small mt-1">
+                        Valid email is required.
+                      </div>
+                    </div>
+
+                    <div class="col-md-3">
+                      <label class="form-label small fw-semibold">Payee Contact</label>
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        formControlName="phone"
+                        placeholder="Enter 10-digit Number"
+                        maxlength="10"
+                        [ngClass]="{'is-invalid': walletForm.get('phone')?.invalid && walletForm.get('phone')?.touched}"
+                      />
+                      <div *ngIf="walletForm.get('phone')?.invalid && walletForm.get('phone')?.touched" class="text-danger small mt-1">
+                        Must be a valid 10-digit number.
+                      </div>
+                    </div>
+                    -->
+
+                    <div class="col-md-4">
+                      <label class="form-label small fw-semibold">Amount (₹)</label>
+                      <div class="input-group input-group-sm">
+                        <span class="input-group-text">₹</span>
+                        <input
+                          type="number"
+                          class="form-control"
+                          formControlName="amount"
+                          placeholder="0.00"
+                          [ngClass]="{'is-invalid': walletForm.get('amount')?.invalid && walletForm.get('amount')?.touched}"
+                        />
+                      </div>
+                      <div class="col-12 ammountinwords mt-2" *ngIf="amountInWords">
+                        <span class="small fst-italic" style="color: #722C60;"><b>{{ amountInWords }}</b></span>
+                      </div>
+                      <div *ngIf="walletForm.get('amount')?.invalid && walletForm.get('amount')?.touched" class="text-danger small mt-1">
+                        <span *ngIf="walletForm.get('amount')?.errors?.['required']">Amount is required.</span>
+                        <span *ngIf="walletForm.get('amount')?.errors?.['min']">Min amount is ₹1.</span>
+                        <span *ngIf="walletForm.get('amount')?.errors?.['max']">Max amount is ₹100,000,000.</span>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="d-flex justify-content-center mt-4">
+                    <p-button
+                      type="submit"
+                      [label]="loading ? 'Processing...' : 'Pay Now'"
+                      [icon]="loading ? 'pi pi-spin pi-spinner' : ''"
+                      styleClass="p-button-sm-outline px-5"
+                      [disabled]="walletForm.invalid || loading"
+                      [style]="{ height: '35px', 'font-weight': '600' }"
+                    >
+                    </p-button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-link btn-sm text-decoration-none text-muted" (click)="showWalletModal = false">
+                      Close
+                    </button>
+                  </div> -->
+            </p-dialog>
+
+            <div
+              *ngIf="is_wallet && is_inventory"
+              class="balance-actions-wallet"
+            >
+              <button class="action-btn view-more" (click)="viewMore()">
+                View More
+                <i class="pi pi-external-link"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Inventory Tab -->
+          <div class="balance-section" *ngIf="tabIndex === 1">
+            <div class="balance-header">
+              <div class="balance-title">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25"
+                  height="25"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#722C60"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-wallet"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12"
+                  />
+                  <path d="M20 12v4h-4a2 2 0 0 1 0 -4h4" />
+                </svg>
+                <span>Inventory Balance</span>
+              </div>
+              <div class="balance-amount">
+                <span
+                  class="currency"
+                  style="font-family: Arial; padding-right: 0.2rem"
+                  >&#8377;</span
+                >
+                <span class="amount">{{
+                  inventoryBalance | number: "1.0-0"
+                }}</span>
+              </div>
+            </div>
+            <div class="balance-actions">
+              <div class="alert-left">
+                <div class="warning-icon">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"
+                    />
+                  </svg>
+                </div>
+                <span class="alert-text">Low Balance</span>
+              </div>
+              <div>
+                <button
+                  class="action-btn view-more"
+                  (click)="viewMoreInventory()"
+                >
+                  View More
+                  <i class="pi pi-external-link"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+       <div *ngIf="!is_wallet && tempBalance > 0" class="wallet-container px-0">
+        <div class="tab-header">
+          <button
+            class="tab-button"
+            [class.active]="tabIndex === 0"
+            (click)="tabIndex = 0"
+          >
+            <span>Wallet</span>
+          </button>
+        </div>
+        <div class="wallet-content">
+          <div class="balance-section" *ngIf="tabIndex === 0">
+            <div class="balance-header">
+              <div class="balance-title">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25px"
+                  height="25px"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#612E86"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-wallet"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12"
+                  />
+                  <path d="M20 12v4h-4a2 2 0 0 1 0 -4h4" />
+                </svg>
+                <span class="card-title title_header">Wallet Balance</span>
+              </div>
+              <div class="balance-amount">
+                <span
+                  class="currency"
+                  style="font-family: Arial; padding-right: 0.2rem"
+                  >&#8377;</span
+                >
+                  <span class="amount">{{ tempBalance | number }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+     
+      <!-- pending activites -->
+      <div
+        class="row outer_card side-action-container status-container"
+        [class.expanded]="!is_wallet"
+      >
+        <div class="card pending-actions-container">
+          <!-- card-body -->
+
+          <!-- <div class="row" style="padding-left:5px;"> -->
+          <div class="pending-action-title-container">
+            <h5 class="card-title title_header">Pending Activities</h5>
+            <!-- <h5 class="card-title title_header  clickable" style=" background-color: var(--theme-color-faint-30);
+          border-radius: 1rem;
+          text-align: center;
+          max-height: 2.5rem;
+          padding: 5px 10px !important;" (click)="gotoOrderListing()"> Count - {{totalRecords}}</h5>-->
+          </div>
+
+          <div class="action-container" [class.expanded]="!is_wallet">
+            <ng-container *ngIf="pendingOrderDetils?.length === 0">
+              <div>
+                <span colspan="8" style="text-align: center; font-size: 1rem"
+                  >No recent Activity
+                </span>
+              </div>
+            </ng-container>
+            <div
+              [ngClass]="{ '': !showRow, row: showRow }"
+              style="justify-content: center"
+            >
+              <div
+                class="outer_card_0 actions"
+                [ngClass]="{ '': !showRow, 'col-5 me-1 ms-1': showRow }"
+                *ngFor="let order of pendingOrderDetils; let i = index"
+              >
+                <div [ngClass]="{ '': !showRow, 'col-1': showRow }"></div>
+                <div class="card mt-1">
+                  <div
+                    class="mt-1 clickable"
+                    trackClick="click_pending_activity_card"
+                    [trackingParams]="{
+                      card_type: order.order_type, 
+                      order_id: order.id,
+                      status: order.status,
+                      branch: order.branch,
+                      bulk_id: order.bulk_order || null 
+                    }"
+                    (click)="getOrderType(order.bulk_order, order)"
+                  >
+                    <div class="row">
+                      <div class="col-lg-6 col-sm-6 col-md-6 d-flex">
+                        <h6
+                          class="card-subtitle title_header_0 badge bg-light text-dark"
+                        >
+                          Order ID:
+                          <span
+                            *ngIf="
+                              order.bulk_order == null;
+                              else showBulkOrderId
+                            "
+                            >{{ order.id }}</span
+                          >
+                          <ng-template #showBulkOrderId>{{
+                            order.id
+                          }}</ng-template>
+                        </h6>
+
+                        <div
+                          class="col-lg-1 col-sm-1 col-md-1"
+                          *ngIf="
+                            order.status === 'Waiting for Approval' ||
+                            order.status === 'Approval Pending'
+                          "
+                          pTooltip="Order is waiting for Approval"
+                          tooltipPosition="top"
+                        >
+                          <div class="activity lead">
+                            <div class="blink">
+                              <div class="blink-dot"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <ng-template #showBlankDiv>
+                        <div class="col-lg-1 col-sm-1 col-md-1"></div>
+                      </ng-template>
+                      <div class="col-lg-5 col-sm-5 col-md-5 text-right">
+                        <span class="date text-dark pt-1"
+                          >{{ order.created | date }}
+                        </span>
+                      </div>
+                    </div>
+                    <p class="card-text mt-3">
+                      {{ order.order_type }} | {{ order.status }} |
+                      {{ order.branch }} |
+                      <span *ngIf="order.bulk_order"
+                        ><b>Bulk Id : </b> {{ order.bulk_order }}</span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

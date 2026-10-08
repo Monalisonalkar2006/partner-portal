@@ -1,0 +1,84 @@
+﻿<div class="bcg p-4">
+    <div class="card card_outLine mt-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6 col-sm-6 col-md-6">
+                    <p class="nav_link_cat  ms-1">
+                        <span class="clickable" [routerLink]="'/doqfy/dashboard'">Dashboard</span>
+                        <span [style.font-weight]="'bold'"> >> </span>
+                        <span class="clickable" [routerLink]="'/doqfy/inventory/stamp-inventory'">Stamp Inventory</span>
+                        <span [style.font-weight]="'bold'"> >> </span>
+                        <span>Stamp Available</span>
+                    </p>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-md-6 text-right custom_button">
+                    <p-button [disabled]="stampInventoryStatusData.length === 0" class="ms-2" label="Download"
+                        (onClick)="downloadExcel()" styleClass="p-button-sm-outline"></p-button>
+                    <p-button class="ms-2" label="Back" [routerLink]="['/doqfy/inventory/stamp-inventory']"
+                        styleClass="p-button-sm-outline"></p-button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card_outLine mt-3">
+        <div class="card-body">
+            <div class="inv-table-header mx-2">
+                <h5 class="title_five">Stamp Available</h5>
+                <div class="stamp-inventry-filters">
+                    <div class="overlay_1">
+                        <app-dropdown class="custom-dropdown text-left" placeholder="Select Account" [filter]="true"
+                            filterBy="account_name" [options]="accounts" (onFilter)="onAccountFilter($event)"
+                            [(ngModel)]="selectedAccount" (onChange)="onChangeAccount()"
+                            optionLabel="account_name" optionValue="id"></app-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-2 table-responsive" style="zoom:90%">
+                <app-data-table
+                    [columns]="columns"
+                    [data]="stampInventoryStatusData"
+                    [paginator]="false"
+                    [hoverElevate]="true"
+                    emptyMessage="No Records Found">
+                    <ng-template appTableCell="state" let-row>
+                        <input type="text" [(ngModel)]="row.state" [readonly]="!editMode"
+                            [ngClass]="{'edit-mode': editMode}">
+                    </ng-template>
+                    <ng-template appTableCell="type" let-row>
+                        <input type="text" [(ngModel)]="row.type" [readonly]="!editMode"
+                            [ngClass]="{'edit-mode': editMode}">
+                    </ng-template>
+                    <ng-template appTableCell="denomination" let-row>
+                        <input type="number" [(ngModel)]="row.denomination" [readonly]="!editMode"
+                            [ngClass]="{'edit-mode': editMode}">
+                    </ng-template>
+                    <ng-template appTableCell="procurement" let-row>
+                        <input type="number" [(ngModel)]="row.procurement" [readonly]="!editMode"
+                            [ngClass]="{'edit-mode': editMode}">
+                    </ng-template>
+                    <ng-template appTableCell="amount" let-row>
+                        <input type="number" [(ngModel)]="row.amount" [readonly]="!editMode"
+                            [ngClass]="{'edit-mode': editMode}">
+                    </ng-template>
+                    <ng-template appTableCell="consumed" let-row>
+                        <input type="number" [(ngModel)]="row.consumed" [readonly]="!editMode"
+                            [ngClass]="{'edit-mode': editMode}">
+                    </ng-template>
+                    <ng-template appTableCell="availability" let-row>
+                        <input type="number" [(ngModel)]="row.availability" [readonly]="!editMode"
+                            [ngClass]="{'edit-mode': editMode}">
+                    </ng-template>
+                    <ng-template appTableCell="to_be_procured" let-row>
+                        <input type="number" [(ngModel)]="row.to_be_procured" [readonly]="!editMode"
+                            [ngClass]="{'edit-mode': editMode}">
+                    </ng-template>
+                </app-data-table>
+            </div>
+
+
+        </div>
+    </div>
+
+
+</div>

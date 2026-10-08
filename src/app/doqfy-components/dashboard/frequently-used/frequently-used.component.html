@@ -1,0 +1,80 @@
+<div class="outer_card">
+  <div class="card frequently-container">
+    <!-- card-body -->
+    <div class="div_height_4">
+      <span class="card-title title_header">Frequently Used</span>
+      <div class="row my-1 mt-2">
+        <div class="col-lg-4 col-sm-12 col-md-6 freq-card-container">
+          <div class="card card_style_bs">
+            <div class="card-body">
+              <div
+                *ngIf="addNewSignature; else noSignature"
+                class="before-signature"
+              >
+                <h6 class="card-subtitle subtitle_header mb-1">Signature</h6>
+                <div style="padding-top: 35px; padding-right: 50px">
+                  <p-button
+                    label="Add Signature"
+                    data-bs-toggle="modal"
+                    data-bs-target="#signModel"
+                    styleClass="p-button-sm-outline"
+                  ></p-button>
+                </div>
+              </div>
+              <ng-template #noSignature>
+                <div class="signature-container">
+                  <img
+                    class="image-signature"
+                    [src]="'data:image/png;base64,' + base64Image"
+                    *ngIf="base64Image"
+                  />
+                  <a
+                    class="card-link title-link"
+                    data-bs-toggle="modal"
+                    data-bs-target="#signModel"
+                  >
+                    Edit >>
+                  </a>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-sm-12 col-md-6 freq-card-container">
+          <div class="card card_style_bs">
+            <div class="card-body">
+              <h6 class="card-subtitle subtitle_header mb-1">
+                Contract Execution Edit
+              </h6>
+              <p class="card-text text_freq">
+                Edited, E-Signed and delivered to your doorstep, through DOQFY’s
+                platform .
+              </p>
+              <a [routerLink]="['/doqfy/cat-edit']" class="card-link title_link"
+                >Get Started >>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-sm-12 col-md-6 freq-card-container">
+          <div class="card card_style_bs">
+            <div class="card-body">
+              <h6 class="card-subtitle subtitle_header mb-1">
+                E-Stamp Services
+              </h6>
+              <p class="card-text text_freq">
+                E-Stamping is a hassle-free process to pay stamp duty for all
+                your legal documents.
+              </p>
+              <a [routerLink]="['/doqfy/e-stamp']" class="card-link title_link"
+                >Get Started >>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

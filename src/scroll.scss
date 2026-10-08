@@ -1,0 +1,25 @@
+/* Track */
+::-webkit-scrollbar {
+    width: 8px; /* Adjust the width of the scrollbar */
+    border-radius: 4px;
+  }
+  
+  /* Thumb */
+  ::-webkit-scrollbar-thumb {
+    background-color: #f0ebf3; /* Adjust the color of the thumb */
+    background-color: #EBD0FD; /* Adjust the color of the thumb */
+
+    border-radius: 4px; /* Adjust the border radius of the thumb */
+  }
+  
+  /* Thumb on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #EBD0FD; /* Adjust the color of the thumb on hover */
+    border-radius: 4px;
+  }
+  
+  /* Track background */
+  ::-webkit-scrollbar-track {
+    background-color: #f0ebf3; /* Adjust the color of the track */
+    border-radius: 4px;
+  }

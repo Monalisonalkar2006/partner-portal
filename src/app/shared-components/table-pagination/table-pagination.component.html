@@ -1,0 +1,36 @@
+<div class="tbl-pagination">
+  <div class="tbl-pagination__info">
+    <span class="tbl-pagination__label">Page No.</span>
+    <span class="tbl-pagination__current">{{ currentPage }}</span>
+    <span class="tbl-pagination__label">of {{ totalPages }}</span>
+
+    <input
+      type="number"
+      class="tbl-pagination__jump-input"
+      [class.tbl-pagination__jump-input--error]="jumpPageError"
+      [(ngModel)]="jumpPageValue"
+      (ngModelChange)="jumpPageError = ''"
+      (keydown.enter)="goToPage()"
+      min="1"
+      [max]="totalPages"
+      placeholder="Go to"
+      aria-label="Go to page"
+    />
+    <button type="button" class="tbl-pagination__go-btn" (click)="goToPage()">Go</button>
+    <span class="tbl-pagination__error" *ngIf="jumpPageError">{{ jumpPageError }}</span>
+  </div>
+
+  <div class="tbl-pagination__nav">
+    <p-paginator
+      [first]="first"
+      [rows]="rows"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      [showFirstLastIcon]="false"
+      [showJumpToPageDropdown]="false"
+      [showPageLinks]="false"
+      [dropdownAppendTo]="'body'"
+      (onPageChange)="onPageChange($event)">
+    </p-paginator>
+  </div>
+</div>

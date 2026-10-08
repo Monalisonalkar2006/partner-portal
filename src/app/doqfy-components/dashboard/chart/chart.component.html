@@ -1,0 +1,60 @@
+<div class="outer_card">
+  <div class="card div_height">
+    <!-- card-body -->
+    <div class="" style="padding: 0;">
+      <div class="row " style="background-color: #f6f8fb;">
+        <div class="col-lg-6 col-md-6 col-sm-12 outer_card">
+          <div class="card card_style_bs_0 chart-main-container  e-sign-card">
+            <!-- card-body -->
+            <!-- <div class="div_height_5"> -->
+            <div class="container">
+              <div class="chart-container row">
+                <div class="col-lg-6 col-sm-6 col-md-6">
+                  <h6 class="card-subtitle title_header mb-1 chart-title">E-Sign Count</h6>
+                  <div class="d-flex label-container mt-2">
+                    <div class="col-lg-6 col-sm-12 col-md-6 label-text" *ngFor="let label of labels; let i = index">
+                   
+                        <div class="color-box" [style.background-color]="bgColor[i]"></div>
+                        <span (click)="gotoOrders(label,'CAT_UPLOAD')"  class="label clickable">{{ label }}</span>
+                     
+                     
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-lg-6 col-sm-12 col-md-6 canvas-container">
+                  <canvas  class="clickable e-sign-total-label" id="Esign" >{{ chart }}</canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 ol-sm-12  outer_card">
+          <div class="card card_style_bs_0 chart-main-container">
+            <!-- card-body -->
+            <div class="container">
+              <div class="chart-container row">
+                <div class="col-lg-7 col-sm-12 col-md-7">
+                  <h6 class="card-subtitle title_header mb-1 chart-title">E-Stamp Count</h6>
+                  <div class="d-flex label-container mt-2">
+                    <div class="col-lg-6 col-sm-6 col-md-6 label-text" *ngFor="let label of labelEstamp; let i = index">
+                      <div class="color-box ms-1" [style.background-color]="bgColor[i]"></div>
+                      <span (click)="gotoOrders(label,'ESTAMP')" class="label clickable">{{ label }}</span>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-lg-5 col-sm-12 col-md-5 canvas-container-estamp">
+                  <canvas class="clickable e-stamp-total-label" id="Estamp">{{ chart }}</canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
