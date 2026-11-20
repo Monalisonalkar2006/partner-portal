@@ -40,7 +40,7 @@ function determineApiUrl() {
     'cicd.doqfy.in': 'https://cicd-api.doqfy.in',
   };
 
-  const apiUrl = apiUrls[host] || 'http://192.168.1.67:8000';
+  const apiUrl = apiUrls[host] || 'https://dev-api.doqfy.in';
   const cyberArkEnabled = host.toLowerCase().includes('abcl');
 
   return { apiUrl, cyberArkEnabled };

@@ -16,7 +16,7 @@ export const envConfig: EnvConfig = {
   production: false,
   serviceWorkerEnabled: true,
   environmentTitle: 'Development',
-  apiUrl: 'http://192.168.1.67:8000',
+  apiUrl: 'https://dev-api.doqfy.in',
   cyberArkEnabled: false,
   msalClientId: 'd443367d-5b91-4695-8525-f3ad63cfc3c0',
   msalAuthority: 'https://login.microsoftonline.com/common',
